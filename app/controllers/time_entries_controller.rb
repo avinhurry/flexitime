@@ -1,6 +1,9 @@
 class TimeEntriesController < ApplicationController
   def index
-    @time_entries = TimeEntry.all.order(created_at: :desc)
+    @time_entries = TimeEntry.all.order(clock_in: :asc)
+    @week_start = params[:week_start] ? Date.parse(params[:week_start]) : Date.today
+    @total_hours = TimeEntry.total_hours_for_week(@week_start)
+    @hours_difference = TimeEntry.hours_difference_for_week(@week_start)
   end
 
   def new
@@ -15,6 +18,26 @@ class TimeEntriesController < ApplicationController
     else
       render :new, status: :unprocessable_entity
     end
+  end
+
+  def edit
+    @time_entry = TimeEntry.find(params[:id])
+  end
+
+  def update
+    @time_entry = TimeEntry.find(params[:id])
+
+    if @time_entry.update(time_entry_params)
+      redirect_to time_entries_path, notice: 'Time entry updated successfully.'
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @time_entry = TimeEntry.find(params[:id])
+    @time_entry.destroy
+    redirect_to time_entries_path, notice: 'Time entry deleted successfully.'
   end
 
   private

@@ -2,11 +2,24 @@
 
 <%= link_to 'New Time Entry', new_time_entry_path %>
 
+<h2>Week of <%= @week_start.beginning_of_week %> - <%= @week_start.end_of_week %></h2>
+
+<p>Total Hours Worked: <%= @total_hours %></p>
+<p>Hours Difference: <%= @hours_difference %> (compared to 37 hours)</p>
+
+<%= link_to 'Previous Week', time_entries_path(week_start: @week_start - 7.days) %> |
+<%= link_to 'Next Week', time_entries_path(week_start: @week_start + 7.days) %>
+
 <ul>
   <% @time_entries.each do |entry| %>
     <li>
       Clocked in: <%= entry.clock_in %><br>
-      Clocked out: <%= entry.clock_out || "Not clocked out yet" %>
-    </li>
+      Clocked out: <%= entry.clock_out || "Not clocked out yet" %><br>
+      Hours Worked: <%= entry.hours_worked %>
+       <%= link_to 'Edit', edit_time_entry_path(entry) %>
+       <%= form_with url: time_entry_path(entry), method: :delete, local: true, style: "display:inline;" do %>
+        <%= submit_tag 'Delete', data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </li><br>
   <% end %>
 </ul>
