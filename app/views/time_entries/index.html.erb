@@ -1,0 +1,12 @@
+<h1>Time Entries</h1>
+
+<%= link_to 'New Time Entry', new_time_entry_path %>
+
+<ul>
+  <% @time_entries.each do |entry| %>
+    <li>
+      Clocked in: <%= entry.clock_in %><br>
+      Clocked out: <%= entry.clock_out || "Not clocked out yet" %>
+    </li>
+  <% end %>
+</ul>

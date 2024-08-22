@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  root "home#index"
-  get "home/index"
+  root "time_entries#index"
+  resources :time_entries, only: [:index, :new, :create]
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
