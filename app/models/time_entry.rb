@@ -1,15 +1,17 @@
 class TimeEntry < ApplicationRecord
+  validates :clock_in, :clock_out, presence: true
+
   def hours_worked
     return 0 unless clock_in && clock_out
-    ((clock_out - clock_in) / 1.hour).round(2)
+    total_hours = (clock_out - clock_in) / 1.hour
+    total_hours - (lunch_duration || 0)
   end
 
-  def self.total_hours_for_week(week_start)
-    where(clock_in: week_start.beginning_of_week..week_start.end_of_week).sum(&:hours_worked)
+  def self.total_hours_for_week(start_date)
+    where(clock_in: start_date.beginning_of_week..start_date.end_of_week).sum(&:hours_worked).round(2)
   end
-
-  def self.hours_difference_for_week(week_start, contracted_hours = 37)
-    total_hours = total_hours_for_week(week_start)
-    (total_hours - contracted_hours).round(2)
+  
+  def self.hours_difference_for_week(start_date)
+    (total_hours_for_week(start_date) - 37).round(2)
   end
 end

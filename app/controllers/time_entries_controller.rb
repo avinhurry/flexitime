@@ -43,6 +43,6 @@ class TimeEntriesController < ApplicationController
   private
 
   def time_entry_params
-    params.require(:time_entry).permit(:clock_in, :clock_out)
+    params.require(:time_entry).permit(:clock_in, :clock_out, :lunch_duration)
   end
 end
