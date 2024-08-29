@@ -2,7 +2,8 @@ class TimeEntriesController < ApplicationController
   def index
     @time_entries = TimeEntry.all.order(clock_in: :asc)
     @week_start = params[:week_start] ? Date.parse(params[:week_start]) : Date.today
-    @total_hours = TimeEntry.total_hours_for_week(@week_start)
+    total_hours_decimal = TimeEntry.total_hours_for_week(@week_start)
+    @total_hours = TimeEntry.format_decimal_hours_to_hours_minutes(total_hours_decimal)
     @hours_difference = TimeEntry.hours_difference_for_week(@week_start)
   end
 

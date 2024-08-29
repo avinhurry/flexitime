@@ -13,8 +13,17 @@ class TimeEntry < ApplicationRecord
   end
 
   def self.total_hours_for_week(start_date)
-    where(clock_in: start_date.beginning_of_week..start_date.end_of_week).sum(&:hours_worked).round(2)
+    week_start = start_date.beginning_of_week
+    week_end = start_date.end_of_week
+    total_hours = where(clock_in: week_start..week_end).sum(&:hours_worked)
+    total_hours.round(2)
   end
+
+  def self.format_decimal_hours_to_hours_minutes(decimal_hours)
+    hours = decimal_hours.to_i
+    minutes = ((decimal_hours - hours) * 60).round
+    "#{hours}h #{minutes}m"
+  end  
   
   def self.hours_difference_for_week(start_date)
     (total_hours_for_week(start_date) - 37).round(2)
@@ -23,11 +32,10 @@ class TimeEntry < ApplicationRecord
   def hours_worked_in_hours_and_minutes
     return "0h 0m" unless hours_worked
 
-    total_hours = hours_worked
-    hours = total_hours.floor
-    minutes = ((total_hours - hours) * 60).round
+    hours = hours_worked.to_i
+    minutes = ((hours_worked - hours) * 60).round
 
-    # If minutes are 60, it means we need to adjust hours and minutes
+    # Handle cases where minutes might be rounded to 60
     if minutes == 60
       hours += 1
       minutes = 0

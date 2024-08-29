@@ -3,7 +3,7 @@
 <%= link_to 'New Time Entry', new_time_entry_path %>
 
 <h2>Week of <%= @week_start.beginning_of_week %> - <%= @week_start.end_of_week %></h2>
-<p>Total Hours Worked: <%= @total_hours %></p>
+<p>Total Hours Worked this Week: <%= @total_hours %></p>
 <p>Hours Difference: <%= @hours_difference %> (compared to 37 hours)</p>
 
 <%= link_to 'Previous Week', time_entries_path(week_start: @week_start - 7.days) %> |
