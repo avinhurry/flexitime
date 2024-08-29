@@ -4,7 +4,12 @@ class TimeEntry < ApplicationRecord
   def hours_worked
     return 0 unless clock_in && clock_out
     total_hours = (clock_out - clock_in) / 1.hour
-    total_hours - (lunch_duration || 0)
+    total_hours - lunch_duration
+  end
+
+  def lunch_duration
+    return 0 unless lunch_out && lunch_in
+    (lunch_in - lunch_out) / 1.hour
   end
 
   def self.total_hours_for_week(start_date)
