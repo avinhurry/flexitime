@@ -11,6 +11,11 @@
     <%= form.datetime_select :clock_out %>
   </div>
 
+  <div class="field">
+    <%= form.label :lunch_duration %>
+    <%= form.number_field :lunch_duration, step: 0.1, placeholder: 'Hours' %>
+  </div>
+
   <div>
     <%= form.submit 'Update Time Entry' %>
   </div>
