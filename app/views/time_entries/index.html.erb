@@ -2,7 +2,8 @@
 
 <%= link_to 'New Time Entry', new_time_entry_path %>
 
-<h2>Week of <%= @week_start.beginning_of_week %> - <%= @week_start.end_of_week %></h2>
+<h2>Week of <%= @work_week_start.strftime('%d-%m-%Y') %> to <%= @work_week_end.strftime('%d-%m-%Y') %></h2>
+
 <p>Total Hours Worked this Week: <%= @total_hours %></p>
 <p>Hours Difference: <%= @hours_difference %> (compared to 37 hours)</p>
 
