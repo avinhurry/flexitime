@@ -5,7 +5,15 @@
 <h2>Week of <%= @work_week_start.strftime('%d-%m-%Y') %> to <%= @work_week_end.strftime('%d-%m-%Y') %></h2>
 
 <p>Total Hours Worked this Week: <%= @total_hours %></p>
-<p>Hours Difference: <%= @hours_difference %> (compared to 37 hours)</p>
+
+<% if @hours_difference < 0 %>
+  <p>You need to work <%= -@hours_difference %> more hours this week to meet your 37 hour contract.</p>
+<% elsif @hours_difference > 0 %>
+  <p>You have worked <%= @hours_difference %> more hours than your 37 hour contract this week. Great job!</p>
+<% else %>
+  <p>You have met your 37 hour contract for this week.</p>
+<% end %>
+
 
 <%= link_to 'Previous Week', time_entries_path(week_start: @week_start - 7.days) %> |
 <%= link_to 'Next Week', time_entries_path(week_start: @week_start + 7.days) %>
