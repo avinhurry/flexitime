@@ -12,6 +12,25 @@ class TimeEntry < ApplicationRecord
     (lunch_out - lunch_in) / 1.hour
   end
 
+  def lunch_duration_in_hours_and_minutes
+    return "0h 0m" unless lunch_out && lunch_in
+    
+    # Calculate the duration in hours (as a float)
+    duration_in_hours = (lunch_out - lunch_in) / 1.hour
+    
+    # Convert the float into hours and minutes
+    hours = duration_in_hours.floor
+    minutes = ((duration_in_hours - hours) * 60).round
+  
+    # Adjust if minutes reach 60
+    if minutes == 60
+      hours += 1
+      minutes = 0
+    end
+  
+    "#{hours}h #{minutes}m"
+  end
+
   def self.total_hours_for_week(start_date)
     week_start = start_date.beginning_of_week
     week_end = start_date.end_of_week
