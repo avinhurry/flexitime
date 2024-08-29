@@ -15,7 +15,7 @@
       Clocked in: <%= entry.clock_in %><br>
       Clocked out: <%= entry.clock_out || "Not clocked out yet" %><br>
       Lunch Duration: <%= entry.lunch_duration || 0 %> hours<br>
-      Hours Worked: <%= entry.hours_worked %><br>
+      Hours Worked: <%= entry.hours_worked_in_hours_and_minutes %><br>
       <%= link_to 'Edit', edit_time_entry_path(entry) %>
        <%= form_with url: time_entry_path(entry), method: :delete, local: true, style: "display:inline;" do %>
         <%= submit_tag 'Delete', data: { confirm: 'Are you sure?' } %>

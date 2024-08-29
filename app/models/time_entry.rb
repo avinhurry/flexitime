@@ -19,4 +19,20 @@ class TimeEntry < ApplicationRecord
   def self.hours_difference_for_week(start_date)
     (total_hours_for_week(start_date) - 37).round(2)
   end
+
+  def hours_worked_in_hours_and_minutes
+    return "0h 0m" unless hours_worked
+
+    total_hours = hours_worked
+    hours = total_hours.floor
+    minutes = ((total_hours - hours) * 60).round
+
+    # If minutes are 60, it means we need to adjust hours and minutes
+    if minutes == 60
+      hours += 1
+      minutes = 0
+    end
+
+    "#{hours}h #{minutes}m"
+  end
 end
