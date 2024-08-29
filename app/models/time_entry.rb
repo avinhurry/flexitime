@@ -22,9 +22,14 @@ class TimeEntry < ApplicationRecord
   def self.format_decimal_hours_to_hours_minutes(decimal_hours)
     hours = decimal_hours.to_i
     minutes = ((decimal_hours - hours) * 60).round
+    # Handle edge case where minutes might be 60
+    if minutes == 60
+      hours += 1
+      minutes = 0
+    end
     "#{hours}h #{minutes}m"
-  end  
-  
+  end
+
   def self.hours_difference_for_week(start_date)
     (total_hours_for_week(start_date) - 37).round(2)
   end

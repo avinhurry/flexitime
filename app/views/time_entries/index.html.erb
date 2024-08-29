@@ -7,13 +7,12 @@
 <p>Total Hours Worked this Week: <%= @total_hours %></p>
 
 <% if @hours_difference < 0 %>
-  <p>You need to work <%= -@hours_difference %> more hours this week to meet your 37 hour contract.</p>
+  <p>You need to work <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %> more hours this week to meet your 37-hour contract.</p>
 <% elsif @hours_difference > 0 %>
-  <p>You have worked <%= @hours_difference %> more hours than your 37 hour contract this week. Great job!</p>
+  <p>You have worked <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %> more hours than your 37-hour contract this week. Great job!</p>
 <% else %>
-  <p>You have met your 37 hour contract for this week.</p>
+  <p>You have met your 37-hour contract for this week.</p>
 <% end %>
-
 
 <%= link_to 'Previous Week', time_entries_path(week_start: @week_start - 7.days) %> |
 <%= link_to 'Next Week', time_entries_path(week_start: @week_start + 7.days) %>
