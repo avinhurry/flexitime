@@ -9,7 +9,7 @@ class TimeEntry < ApplicationRecord
 
   def lunch_duration
     return 0 unless lunch_out && lunch_in
-    (lunch_in - lunch_out) / 1.hour
+    (lunch_out - lunch_in) / 1.hour
   end
 
   def self.total_hours_for_week(start_date)
