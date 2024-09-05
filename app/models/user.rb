@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :time_entries, dependent: :destroy
   has_secure_password
 
   generates_token_for :email_verification, expires_in: 2.days do

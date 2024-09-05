@@ -1,6 +1,6 @@
 class TimeEntriesController < ApplicationController
   def index
-    @time_entries = TimeEntry.all.order(clock_in: :asc)
+    @time_entries = current_user.time_entries.order(clock_in: :asc)
     @week_start = params[:week_start] ? Date.parse(params[:week_start]) : Date.today
     @work_week_start = @week_start.beginning_of_week(:monday)
     @work_week_end = @work_week_start + 4.days
@@ -10,11 +10,10 @@ class TimeEntriesController < ApplicationController
   end
 
   def new
-    @time_entry = TimeEntry.new
+    @time_entry = current_user.time_entries.build
   end
-
   def create
-    @time_entry = TimeEntry.new(time_entry_params)
+    @time_entry = current_user.time_entries.build(time_entry_params)
 
     if @time_entry.save
       redirect_to time_entries_path, notice: 'Time entry recorded successfully.'
@@ -24,11 +23,11 @@ class TimeEntriesController < ApplicationController
   end
 
   def edit
-    @time_entry = TimeEntry.find(params[:id])
+    @time_entry = current_user.time_entries.find(params[:id])
   end
 
   def update
-    @time_entry = TimeEntry.find(params[:id])
+    @time_entry = current_user.time_entries.find(params[:id])
 
     if @time_entry.update(time_entry_params)
       redirect_to time_entries_path, notice: 'Time entry updated successfully.'
@@ -38,7 +37,7 @@ class TimeEntriesController < ApplicationController
   end
 
   def destroy
-    @time_entry = TimeEntry.find(params[:id])
+    @time_entry = current_user.time_entries.find(params[:id])
     @time_entry.destroy
     redirect_to time_entries_path, notice: 'Time entry deleted successfully.'
   end
@@ -47,5 +46,9 @@ class TimeEntriesController < ApplicationController
 
   def time_entry_params
     params.require(:time_entry).permit(:clock_in, :clock_out, :lunch_in, :lunch_out)
+  end
+
+  def current_user
+    @current_user ||= Current.user
   end
 end
