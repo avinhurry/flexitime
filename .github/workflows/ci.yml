@@ -85,6 +85,12 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Set up database
+        run: |
+          bin/rails db:create
+          bin/rails db:schema:load # or db:migrate depending on your setup
+          bin/rails db:seed
+
       - name: Run tests
         env:
           RAILS_ENV: test
