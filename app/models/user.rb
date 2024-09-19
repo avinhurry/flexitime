@@ -1,5 +1,9 @@
 class User < ApplicationRecord
   has_many :time_entries, dependent: :destroy
+
+  after_initialize :set_default_cumulative_hours
+
+
   has_secure_password
 
   generates_token_for :email_verification, expires_in: 2.days do
@@ -23,5 +27,13 @@ class User < ApplicationRecord
 
   after_update if: :password_digest_previously_changed? do
     sessions.where.not(id: Current.session).delete_all
+  end
+
+  def set_default_cumulative_hours
+    self.cumulative_hours ||= 0.0
+  end
+
+  def formatted_cumulative_hours
+    TimeEntry.format_decimal_hours_to_hours_minutes(cumulative_hours)
   end
 end

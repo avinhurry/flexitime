@@ -16,6 +16,7 @@ class TimeEntriesController < ApplicationController
     @time_entry = current_user.time_entries.build(time_entry_params)
 
     if @time_entry.save
+      TimeEntry.update_cumulative_hours(current_user, @time_entry.clock_in.beginning_of_week)
       redirect_to time_entries_path, notice: "Time entry recorded successfully."
     else
       render :new, status: :unprocessable_entity
@@ -30,6 +31,7 @@ class TimeEntriesController < ApplicationController
     @time_entry = current_user.time_entries.find(params[:id])
 
     if @time_entry.update(time_entry_params)
+      TimeEntry.update_cumulative_hours(current_user, @time_entry.clock_in.beginning_of_week)
       redirect_to time_entries_path, notice: "Time entry updated successfully."
     else
       render :edit, status: :unprocessable_entity
@@ -39,6 +41,7 @@ class TimeEntriesController < ApplicationController
   def destroy
     @time_entry = current_user.time_entries.find(params[:id])
     @time_entry.destroy
+    TimeEntry.update_cumulative_hours(current_user, @time_entry.clock_in.beginning_of_week)
     redirect_to time_entries_path, notice: "Time entry deleted successfully."
   end
 
