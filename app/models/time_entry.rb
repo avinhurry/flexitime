@@ -33,12 +33,6 @@ class TimeEntry < ApplicationRecord
     "#{hours}h #{minutes}m"
   end
 
-  def self.update_cumulative_hours(user, start_date)
-    week_difference = hours_difference_for_week(start_date)
-    user.cumulative_hours += week_difference
-    user.save
-  end
-
   def self.total_hours_for_week(start_date)
     week_start = start_date.beginning_of_week
     week_end = start_date.end_of_week
