@@ -1,9 +1,11 @@
 class TimeEntriesController < ApplicationController
   def index
-    @time_entries = current_user.time_entries.order(clock_in: :asc)
     @week_start = params[:week_start] ? Date.parse(params[:week_start]) : Date.today
     @work_week_start = @week_start.beginning_of_week(:monday)
     @work_week_end = @work_week_start + 4.days
+    @time_entries = current_user.time_entries
+      .where(clock_in: @work_week_start..@work_week_end)
+      .order(clock_in: :asc)
     total_hours_decimal = TimeEntry.total_hours_for_week(@week_start)
     @total_hours = TimeEntry.format_decimal_hours_to_hours_minutes(total_hours_decimal)
     @hours_difference = TimeEntry.hours_difference_for_week(@week_start)
