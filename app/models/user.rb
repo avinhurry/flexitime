@@ -25,4 +25,9 @@ class User < ApplicationRecord
   after_update if: :password_digest_previously_changed? do
     sessions.where.not(id: Current.session).delete_all
   end
+
+  def update_cumulative_hours
+    total_hours = time_entries.sum(&:hours_worked)
+    self.update(cumulative_hours: total_hours - 37)
+  end
 end

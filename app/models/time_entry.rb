@@ -3,6 +3,13 @@ class TimeEntry < ApplicationRecord
 
   validates :clock_in, :clock_out, presence: true
 
+  after_save :update_user_cumulative_hours
+  after_destroy :update_user_cumulative_hours
+
+  def update_user_cumulative_hours
+    user.update_cumulative_hours
+  end
+
   def hours_worked
     return 0 unless clock_in && clock_out
     total_hours = (clock_out - clock_in) / 1.hour
