@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_19_150444) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_07_172132) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -40,7 +40,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_150444) do
     t.boolean "verified", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.float "cumulative_hours", default: 0.0
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
