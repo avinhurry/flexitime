@@ -8,9 +8,8 @@ class TimeEntriesController < ApplicationController
       .order(clock_in: :asc)
     total_hours_decimal = TimeEntry.total_hours_for_week(@week_start)
     @total_hours = TimeEntry.format_decimal_hours_to_hours_minutes(total_hours_decimal)
-    @carryover_hours = current_user.carryover_hours(@week_start)
-    @adjusted_hours_needed = 37 - @carryover_hours
-    @hours_difference = TimeEntry.total_hours_for_week(@week_start) - @adjusted_hours_needed
+    @hours_difference = TimeEntry.total_hours_for_week(@week_start) - 37
+    @total_overtime = current_user.total_overtime
   end
 
   def new

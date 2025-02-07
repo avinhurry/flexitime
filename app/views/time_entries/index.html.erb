@@ -32,11 +32,11 @@
   <% end %>
 </ul>
 
-<p>Carryover from previous weeks: 
-  <% if @carryover_hours > 0 %>
-    <%= @carryover_hours %> hours (extra worked)
-  <% elsif @carryover_hours < 0 %>
-    <%= @carryover_hours.abs %> hours (owed)
+<p>Carryover from previous weeks (including this week): 
+  <% if @total_overtime > 0 %>
+    <%= @total_overtime %> hours (extra worked)
+  <% elsif @total_overtime < 0 %>
+    <%= @total_overtime.abs %> hours (owed)
   <% else %>
     No carryover hours
   <% end %>

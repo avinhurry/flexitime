@@ -69,4 +69,8 @@ class TimeEntry < ApplicationRecord
 
     "#{hours}h #{minutes}m"
   end
+
+  def overtime
+    hours_worked - 37
+  end
 end

@@ -27,9 +27,7 @@ class User < ApplicationRecord
   end
 
 
-  def carryover_hours(week_start)
-    previous_week_start = week_start - 7.days
-    previous_hours_difference = TimeEntry.hours_difference_for_week(previous_week_start)
-    previous_hours_difference == -37 ? 0 : previous_hours_difference
+  def total_overtime
+    time_entries.sum(&:overtime)
   end
 end
