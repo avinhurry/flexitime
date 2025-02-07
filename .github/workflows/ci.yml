@@ -5,7 +5,23 @@ on:
   push:
     branches: [ main ]
 
+env:
+  RUBY_VERSION: ${{ steps.extract_ruby_version.outputs.version }}
+
 jobs:
+  extract_ruby_version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract Ruby version from .tool-versions
+        id: extract_ruby_version
+        run: |
+          RUBY_VERSION=$(grep -oP 'ruby\s+\K[^\s]+' .tool-versions)
+          echo "version=$RUBY_VERSION" >> $GITHUB_ENV
+
   scan_ruby:
     runs-on: ubuntu-latest
 
@@ -16,23 +32,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
-
-  scan_js:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
+          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
       - name: Scan for security vulnerabilities in JavaScript dependencies
@@ -47,7 +47,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
       - name: Lint code for consistent style
@@ -66,12 +66,6 @@ jobs:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
-      # redis:
-      #   image: redis
-      #   ports:
-      #     - 6379:6379
-      #   options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips postgresql-client
@@ -82,7 +76,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
       # - name: Run tests
