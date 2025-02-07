@@ -26,8 +26,10 @@ class User < ApplicationRecord
     sessions.where.not(id: Current.session).delete_all
   end
 
-  def update_cumulative_hours
-    total_hours = time_entries.sum(&:hours_worked)
-    self.update(cumulative_hours: total_hours - 37)
+
+  def carryover_hours(week_start)
+    previous_week_start = week_start - 7.days
+    previous_hours_difference = TimeEntry.hours_difference_for_week(previous_week_start)
+    previous_hours_difference == -37 ? 0 : previous_hours_difference
   end
 end
