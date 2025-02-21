@@ -8,7 +8,7 @@ class TimeEntriesController < ApplicationController
       .order(clock_in: :asc)
     total_hours_decimal = TimeEntry.total_hours_for_week(@week_start)
     @total_hours = TimeEntry.format_decimal_hours_to_hours_minutes(total_hours_decimal)
-    @hours_difference = TimeEntry.total_hours_for_week(@week_start) - 37
+    @hours_difference = TimeEntry.total_hours_for_week(@week_start) - current_user.contracted_hours
   end
 
   def new

@@ -30,6 +30,11 @@
   </div>
 
   <div>
+    <%= form.label :contracted_hours, style: "display: block" %>
+    <%= form.number_field :contracted_hours, required: true, autocomplete: "contracted-hours" %>
+  </div>
+
+  <div>
     <%= form.submit "Sign up" %>
   </div>
 <% end %>
