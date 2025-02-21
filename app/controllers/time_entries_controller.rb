@@ -9,7 +9,6 @@ class TimeEntriesController < ApplicationController
     total_hours_decimal = TimeEntry.total_hours_for_week(@week_start)
     @total_hours = TimeEntry.format_decimal_hours_to_hours_minutes(total_hours_decimal)
     @hours_difference = TimeEntry.total_hours_for_week(@week_start) - 37
-    @total_overtime = current_user.total_overtime
   end
 
   def new

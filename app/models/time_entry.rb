@@ -51,10 +51,6 @@ class TimeEntry < ApplicationRecord
     "#{hours}h #{minutes}m"
   end
 
-  def self.hours_difference_for_week(start_date)
-    (total_hours_for_week(start_date) - 37).round(2)
-  end
-
   def hours_worked_in_hours_and_minutes
     return "0h 0m" unless hours_worked
 
@@ -68,9 +64,5 @@ class TimeEntry < ApplicationRecord
     end
 
     "#{hours}h #{minutes}m"
-  end
-
-  def overtime
-    hours_worked - 37
   end
 end

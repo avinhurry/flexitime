@@ -25,9 +25,4 @@ class User < ApplicationRecord
   after_update if: :password_digest_previously_changed? do
     sessions.where.not(id: Current.session).delete_all
   end
-
-
-  def total_overtime
-    time_entries.sum(&:overtime)
-  end
 end
