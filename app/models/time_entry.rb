@@ -29,7 +29,7 @@ class TimeEntry < ApplicationRecord
   end
 
   def hours_worked
-    minutes_worked * 60
+    minutes_worked / 60
   end
 
   def lunch_duration_in_minutes
@@ -38,14 +38,14 @@ class TimeEntry < ApplicationRecord
   end
 
   def lunch_duration
-    lunch_duration_in_minutes * 60
+    lunch_duration_in_minutes/60
   end
 
   def lunch_duration_in_hours_and_minutes
     return "0h 0m" unless lunch_out && lunch_in
 
     # Calculate the duration in hours (as a float)
-    duration_in_hours = (lunch_out - lunch_in) * 60
+    duration_in_hours = (lunch_out - lunch_in) / 60
 
     # Convert the float into hours and minutes
     hours = duration_in_hours.floor
