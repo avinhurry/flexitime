@@ -3,22 +3,50 @@ class TimeEntry < ApplicationRecord
 
   validates :clock_in, :clock_out, presence: true
 
-  def hours_worked
+  after_save { update_week_entry_offset }
+
+  def update_week_entry_offset
+    start_date = self.clock_in
+    week_start = start_date.beginning_of_week
+    week_end = start_date.end_of_week
+
+    working_week = TimeEntry.where(clock_in: week_start..week_end)
+    working_week_minutes = working_week.sum(&:minutes_worked)
+    first_working_day = working_week.first
+    week_entry = first_working_day.user.week_entries.find_or_initialize_by(beginning_of_week: week_start)
+    user = first_working_day.user
+    contracted_hours = user.contracted_hours
+
+    offset_minutes = working_week_minutes - (contracted_hours * 60)
+
+    week_entry.update(offset_in_minutes: offset_minutes)
+  end
+
+  def minutes_worked
     return 0 unless clock_in && clock_out
-    total_hours = (clock_out - clock_in) / 1.hour
-    total_hours - lunch_duration
+    total_minutes = (clock_out - clock_in)/1.minute
+    (total_minutes - lunch_duration)
+  end
+
+  def hours_worked
+    minutes_worked / 1.minute
+  end
+
+  def lunch_duration_in_minutes
+    return 0 unless lunch_out && lunch_in
+    (lunch_out - lunch_in)
   end
 
   def lunch_duration
-    return 0 unless lunch_out && lunch_in
-    (lunch_out - lunch_in) / 1.hour
+    lunch_duration_in_minutes/60
   end
 
   def lunch_duration_in_hours_and_minutes
     return "0h 0m" unless lunch_out && lunch_in
 
     # Calculate the duration in hours (as a float)
-    duration_in_hours = (lunch_out - lunch_in) / 1.hour
+    duration_in_minutes = (lunch_out - lunch_in) / 1.minute
+    duration_in_hours = duration_in_minutes / 1.minute
 
     # Convert the float into hours and minutes
     hours = duration_in_hours.floor
