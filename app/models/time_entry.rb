@@ -24,12 +24,12 @@ class TimeEntry < ApplicationRecord
 
   def minutes_worked
     return 0 unless clock_in && clock_out
-    total_minutes = (clock_out - clock_in)
-    (total_minutes - lunch_duration)/1.minute
+    total_minutes = (clock_out - clock_in)/1.minute
+    (total_minutes - lunch_duration)
   end
 
   def hours_worked
-    minutes_worked / 60
+    minutes_worked / 1.minute
   end
 
   def lunch_duration_in_minutes
