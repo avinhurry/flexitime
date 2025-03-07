@@ -18,7 +18,7 @@ class TimeEntry < ApplicationRecord
     contracted_hours = user.contracted_hours
 
     offset_minutes = working_week_minutes - (contracted_hours * 60)
- 
+
     week_entry.update(offset_in_minutes: offset_minutes)
   end
 
