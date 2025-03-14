@@ -62,6 +62,9 @@ group :test do
 
   # Test framework
   gem "rspec-rails", "~> 7.0.0"
+
+  # For fixtures (to define test data)
+  gem "factory_bot_rails"
 end
 
 gem "dockerfile-rails", ">= 1.6", group: :development
