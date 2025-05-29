@@ -33,12 +33,20 @@ class TimeEntry < ApplicationRecord
     "#{hours}h #{minutes}m"
   end
 
-  def self.total_hours_for_week(start_date)
-    week_start = start_date.beginning_of_week
-    week_end = start_date.end_of_week
-    total_hours = where(clock_in: week_start..week_end).sum(&:hours_worked)
-    total_hours.round(2)
+  def self.total_hours_for_week(start_date, user)
+    week_start = start_date.beginning_of_week(:monday)
+    week_end = week_start + 4.days
+
+    where(user: user, clock_in: week_start..week_end).sum(&:hours_worked).round(2)
   end
+
+
+  def self.total_hours_for_week(start_date, user)
+  week_start = start_date.beginning_of_week(:monday)
+  week_end = week_start + 4.days
+
+  where(user: user, clock_in: week_start..week_end).sum(&:hours_worked).round(2)
+end
 
   def self.format_decimal_hours_to_hours_minutes(decimal_hours)
     hours = decimal_hours.to_i
