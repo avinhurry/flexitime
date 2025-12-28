@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_21_092319) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_07_141849) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -44,6 +44,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_21_092319) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "week_entries", force: :cascade do |t|
+    t.datetime "beginning_of_week"
+    t.integer "offset_in_minutes"
+    t.bigint "user_id", null: false
+    t.integer "required_minutes", default: 0, null: false
+    t.index ["user_id"], name: "index_week_entries_on_user_id"
+  end
+
   add_foreign_key "sessions", "users"
   add_foreign_key "time_entries", "users"
+  add_foreign_key "week_entries", "users"
 end
