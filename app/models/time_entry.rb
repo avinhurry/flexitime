@@ -3,9 +3,9 @@ class TimeEntry < ApplicationRecord
 
   validates :clock_in, :clock_out, presence: true
 
-  after_save { update_after_save }
+  after_save { update_week_entry_offset }
 
-  def update_after_save
+  def update_week_entry_offset
     start_date = self.clock_in
     week_start = start_date.beginning_of_week
     week_end = start_date.end_of_week
