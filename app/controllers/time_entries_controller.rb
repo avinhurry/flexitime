@@ -1,20 +1,24 @@
 class TimeEntriesController < ApplicationController
   def index
     @week_start = params[:week_start] ? Date.parse(params[:week_start]) : Date.today
-    @work_week_start = @week_start.beginning_of_week(:monday)
-    @work_week_end = @work_week_start + 4.days
+    work_week_range = TimeEntry.work_week_range(@week_start)
+    @work_week_start = work_week_range.begin
+    @work_week_end = work_week_range.end
     @time_entries = current_user.time_entries
-      .where(clock_in: @work_week_start..@work_week_end)
+      .where(clock_in: work_week_range)
       .order(clock_in: :asc)
     total_hours_decimal = TimeEntry.total_hours_for_week(@week_start, current_user)
     @total_hours = TimeEntry.format_decimal_hours_to_hours_minutes(total_hours_decimal)
-    minutes_carried_over = WeekEntry.find_by(beginning_of_week: @work_week_start)&.required_minutes || 0
-    @hours_difference = TimeEntry.total_hours_for_week(@week_start) - current_user.contracted_hours  - (minutes_carried_over / 60)
+    required_minutes = WeekEntry.required_minutes_for(current_user, @work_week_start)
+    required_hours_decimal = required_minutes / 60.0
+    @required_hours = TimeEntry.format_decimal_hours_to_hours_minutes(required_hours_decimal)
+    @hours_difference = total_hours_decimal - required_hours_decimal
   end
 
   def new
     @time_entry = current_user.time_entries.build
   end
+
   def create
     @time_entry = current_user.time_entries.build(time_entry_params)
 
