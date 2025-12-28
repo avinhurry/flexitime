@@ -8,7 +8,8 @@ class TimeEntriesController < ApplicationController
       .order(clock_in: :asc)
     total_hours_decimal = TimeEntry.total_hours_for_week(@week_start, current_user)
     @total_hours = TimeEntry.format_decimal_hours_to_hours_minutes(total_hours_decimal)
-    @hours_difference = total_hours_decimal - 37
+    minutes_carried_over = WeekEntry.find_by(beginning_of_week: @work_week_start)&.required_minutes || 0
+    @hours_difference = TimeEntry.total_hours_for_week(@week_start) - current_user.contracted_hours  - (minutes_carried_over / 60)
   end
 
   def new
