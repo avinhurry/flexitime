@@ -1,5 +1,7 @@
 # Flexitime
 
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
 Flexitime is a small Rails app for tracking clock-in/clock-out time, lunch
 breaks, and weekly hour balances.
 
