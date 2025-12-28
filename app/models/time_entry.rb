@@ -45,7 +45,8 @@ class TimeEntry < ApplicationRecord
     return "0h 0m" unless lunch_out && lunch_in
 
     # Calculate the duration in hours (as a float)
-    duration_in_hours = (lunch_out - lunch_in) / 60
+    duration_in_minutes = (lunch_out - lunch_in) / 1.minute
+    duration_in_hours = duration_in_minutes / 1.minute
 
     # Convert the float into hours and minutes
     hours = duration_in_hours.floor
