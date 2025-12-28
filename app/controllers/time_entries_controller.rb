@@ -23,7 +23,8 @@ class TimeEntriesController < ApplicationController
     @time_entry = current_user.time_entries.build(time_entry_params)
 
     if @time_entry.save
-      redirect_to time_entries_path, notice: "Time entry recorded successfully."
+      week_start = TimeEntry.work_week_range(@time_entry.clock_in).begin.to_date
+      redirect_to time_entries_path(week_start: week_start), notice: "Time entry recorded successfully."
     else
       render :new, status: :unprocessable_entity
     end
@@ -37,7 +38,8 @@ class TimeEntriesController < ApplicationController
     @time_entry = current_user.time_entries.find(params[:id])
 
     if @time_entry.update(time_entry_params)
-      redirect_to time_entries_path, notice: "Time entry updated successfully."
+      week_start = TimeEntry.work_week_range(@time_entry.clock_in).begin.to_date
+      redirect_to time_entries_path(week_start: week_start), notice: "Time entry updated successfully."
     else
       render :edit, status: :unprocessable_entity
     end

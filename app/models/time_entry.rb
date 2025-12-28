@@ -1,5 +1,5 @@
 class TimeEntry < ApplicationRecord
-  WORK_WEEK_DAYS = 4
+  WORK_WEEK_DAYS = 7
   WORK_WEEK_START = :monday
 
   belongs_to :user
