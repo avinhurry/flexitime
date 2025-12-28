@@ -1,24 +1,44 @@
-# README
+# Flexitime
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Flexitime is a small Rails app for tracking clock-in/clock-out time, lunch
+breaks, and weekly hour balances.
 
-Things you may want to cover:
+It's designed around a compressed 4 day week (37 hours by default), with
+carry over between weeks so overtime or shortfalls roll forward automatically.
 
-* Ruby version
+## Features
+- Clock in / clock out with optional lunch breaks
+- Weekly totals showing required hours and balance
+- Carry over of credit/debt between weeks
+- Configurable contracted hours per user
+- Simple, single user workflow (not a full HR system)
 
-* System dependencies
+## Requirements
+- Ruby (see `.tool-versions`)
+- PostgreSQL
 
-* Configuration
+## Setup
 
-* Database creation
+```sh
+bundle install
+bin/rails db:prepare
+```
 
-* Database initialization
+## Run locally
 
-* How to run the test suite
+```sh
+bin/rails server
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+Then visit: http://localhost:3000
 
-* Deployment instructions
+## Tests
 
-* ...
+```sh
+bundle exec rspec
+```
+
+## Notes
+- Weeks start on Monday (Mon-Sun).
+- Required hours for the week are adjusted using the previous week's balance.
+- Built originally for personal use, so it's pragmatic rather than feature heavy.
