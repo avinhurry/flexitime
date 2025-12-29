@@ -33,7 +33,7 @@
 
         <% if @hours_difference > 1 %>
           <p class="summary-positive text-2xl font-semibold">
-            Ahead by <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %>
+            <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %>
           </p>
         <% elsif @hours_difference < -1 %>
           <p class="summary-negative text-2xl font-semibold">
