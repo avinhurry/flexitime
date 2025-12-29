@@ -23,21 +23,25 @@
         <p class="text-2xl font-semibold text-slate-900"><%= @required_hours %></p>
       </div>
       <div>
-        <% if @hours_difference < 1 %>
+        <% if @hours_difference.negative? %>
           <p class="muted">Remaining</p>
+        <% elsif @hours_difference.positive? %>
+          <p class="muted">Ahead</p>
+        <% else %>
+          <p class="muted">On track</p>
         <% end %>
-        
+
         <% if @hours_difference > 1 %>
           <p class="summary-positive text-2xl font-semibold">
             Ahead by <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %>
           </p>
         <% elsif @hours_difference < -1 %>
           <p class="summary-negative text-2xl font-semibold">
-            <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
+            Behind by <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
           </p>
         <% elsif @hours_difference.negative? %>
           <p class="summary-neutral text-2xl font-semibold">
-            <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
+            Remaining <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
           </p>
         <% elsif @hours_difference.positive? %>
           <p class="summary-neutral text-2xl font-semibold">
@@ -51,46 +55,47 @@
   </div>
 </div>
 
-<div class="mt-10">
-  <p class="card-title">Entries</p>
-  <h2 class="section-title">This week</h2>
-
+<div class="mt-20">
   <div class="mt-4 overflow-x-auto">
-    <table class="table">
-      <thead>
-        <tr class="table-head">
-          <th class="pb-3 pl-2">Clocked in</th>
-          <th class="pb-3">Clocked out</th>
-          <th class="pb-3">Lunch duration</th>
-          <th class="pb-3">Hours worked</th>
-          <th class="pb-3 pr-2 text-right">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @time_entries.each do |entry| %>
-          <tr>
-            <td class="table-cell rounded-l-2xl bg-white"><%= format_datetime(entry.clock_in) %></td>
-            <td class="table-cell bg-white"><%= entry.clock_out ? format_datetime(entry.clock_out) : "Not clocked out yet" %></td>
-            <td class="table-cell bg-white">
-              <% if entry.lunch_duration_in_minutes.to_i > 0 %>
-                <%= entry.lunch_duration_in_hours_and_minutes %>
-              <% else %>
-                <span class="text-slate-400">No lunch recorded</span>
-              <% end %>
-            </td>
-            <td class="table-cell bg-white"><%= entry.hours_worked_in_hours_and_minutes %></td>
-            <td class="table-cell rounded-r-2xl bg-white text-right">
-              <div class="flex items-center justify-end gap-2">
-                <%= link_to "Edit", edit_time_entry_path(entry), class: "btn-ghost" %>
-                <%= button_to "Delete", time_entry_path(entry), method: :delete,
-                  class: "btn-danger",
-                  data: { confirm: "Are you sure?" },
-                  form: { class: "inline-block" } %>
-              </div>
-            </td>
+    <% if @time_entries.any? %>
+      <table class="table">
+        <thead>
+          <tr class="table-head">
+            <th class="pb-3 px-4">Clocked in</th>
+            <th class="pb-3 px-4">Clocked out</th>
+            <th class="pb-3 px-4">Lunch duration</th>
+            <th class="pb-3 px-4">Hours worked</th>
+            <th class="pb-3 px-4 text-right">Actions</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @time_entries.each do |entry| %>
+            <tr>
+              <td class="table-cell rounded-l-2xl bg-white"><%= format_datetime(entry.clock_in) %></td>
+              <td class="table-cell bg-white"><%= entry.clock_out ? format_datetime(entry.clock_out) : "Not clocked out yet" %></td>
+              <td class="table-cell bg-white">
+                <% if entry.lunch_duration_in_minutes.to_i > 0 %>
+                  <%= entry.lunch_duration_in_hours_and_minutes %>
+                <% else %>
+                  <span class="text-slate-400">No lunch recorded</span>
+                <% end %>
+              </td>
+              <td class="table-cell bg-white"><%= entry.hours_worked_in_hours_and_minutes %></td>
+              <td class="table-cell rounded-r-2xl bg-white text-right">
+                <div class="flex items-center justify-end gap-2">
+                  <%= link_to "Edit", edit_time_entry_path(entry), class: "btn-ghost" %>
+                  <%= button_to "Delete", time_entry_path(entry), method: :delete,
+                    class: "btn-danger",
+                    data: { confirm: "Are you sure?" },
+                    form: { class: "inline-block" } %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="muted">No entries yet for this week.</p>
+    <% end %>
   </div>
 </div>
