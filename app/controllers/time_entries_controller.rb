@@ -17,6 +17,7 @@ class TimeEntriesController < ApplicationController
 
   def new
     @time_entry = current_user.time_entries.build
+    TimeEntries::Defaults.apply(@time_entry, user: current_user)
   end
 
   def create

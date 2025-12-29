@@ -36,6 +36,11 @@
       <%= form.number_field :contracted_hours, class: "input", required: true, autocomplete: "contracted-hours" %>
     </div>
 
+    <div>
+      <%= form.label :working_days_per_week, "Working days per week", class: "label" %>
+      <%= form.number_field :working_days_per_week, class: "input", required: true, min: 1, max: 7, autocomplete: "working-days" %>
+    </div>
+
     <div class="flex flex-wrap items-center gap-3">
       <%= form.submit "Sign up", class: "btn" %>
       <%= link_to "Already have an account?", sign_in_path, class: "btn-ghost" %>

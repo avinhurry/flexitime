@@ -38,4 +38,22 @@ RSpec.describe User, type: :model do
       expect(user.sessions).not_to include(other_session)
     end
   end
+
+  context "when working days per week are out of range" do
+    it "is invalid" do
+      user = described_class.new(email: "user@example.com", password: password, working_days_per_week: 0)
+
+      expect(user).not_to be_valid
+      expect(user.errors[:working_days_per_week]).to be_present
+    end
+  end
+
+  context "when working days per week are within range" do
+    it "is valid" do
+      user = described_class.new(email: "user@example.com", password: password, working_days_per_week: 4)
+      user.validate
+
+      expect(user.errors[:working_days_per_week]).to be_empty
+    end
+  end
 end

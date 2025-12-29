@@ -16,6 +16,25 @@ RSpec.describe "Time entries", type: :request do
       sign_in_as(user)
     end
 
+    context "when visiting the new entry form" do
+      it "prefills clock times based on contracted hours and working days" do
+        user.update!(contracted_hours: 36, working_days_per_week: 4)
+
+        travel_to Time.zone.local(2025, 3, 7, 9, 15) do
+          get new_time_entry_path
+
+          expect(response).to be_successful
+
+          expected_clock_in = Time.zone.local(2025, 3, 7, 9, 15).change(sec: 0)
+          expected_clock_out = expected_clock_in + 9.hours
+          document = Capybara.string(response.body)
+
+          expect(input_time_value(document, "time_entry[clock_in]")).to eq(expected_clock_in)
+          expect(input_time_value(document, "time_entry[clock_out]")).to eq(expected_clock_out)
+        end
+      end
+    end
+
     context "when creating entries" do
       it "shows a newly created entry for its week" do
         travel_to Time.zone.local(2025, 3, 7, 10, 0) do
@@ -29,10 +48,10 @@ RSpec.describe "Time entries", type: :request do
 
           follow_redirect!
 
-      entry = TimeEntry.order(:id).last
-      expect(response.body).to include(entry.clock_in.strftime("%-d %b %Y, %H:%M"))
-    end
-  end
+          entry = TimeEntry.order(:id).last
+          expect(response.body).to include(entry.clock_in.strftime("%-d %b %Y, %H:%M"))
+        end
+      end
 
       it "renders errors for invalid data" do
         post time_entries_path, params: { time_entry: { clock_in: Time.zone.now } }
@@ -82,5 +101,10 @@ RSpec.describe "Time entries", type: :request do
         expect(user.time_entries.find_by(id: entry.id)).to be_nil
       end
     end
+  end
+
+  def input_time_value(document, name)
+    value = document.find("input[name='#{name}']").value
+    Time.zone.parse(value)
   end
 end

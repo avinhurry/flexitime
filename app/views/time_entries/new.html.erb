@@ -1,7 +1,6 @@
 <div class="card">
   <div class="flex items-center justify-between">
     <div>
-      <p class="card-title">New</p>
       <h1 class="section-title">Add a time entry</h1>
       <p class="muted">Log your start, finish, and any lunch break.</p>
     </div>
@@ -22,19 +21,19 @@
     <div class="grid gap-5 md:grid-cols-2">
       <div>
         <%= form.label :clock_in, class: "label" %>
-        <%= form.datetime_select :clock_in, {}, { class: "select" } %>
+        <%= form.datetime_field :clock_in, class: "input", step: 60 %>
       </div>
       <div>
         <%= form.label :clock_out, class: "label" %>
-        <%= form.datetime_select :clock_out, {}, { class: "select" } %>
+        <%= form.datetime_field :clock_out, class: "input", step: 60 %>
       </div>
       <div>
-        <%= form.label :lunch_in, class: "label" %>
-        <%= form.datetime_select :lunch_in, {}, { class: "select" } %>
+        <%= form.label :lunch_in, "Lunch in (optional)", class: "label" %>
+        <%= form.datetime_field :lunch_in, class: "input", step: 60 %>
       </div>
       <div>
-        <%= form.label :lunch_out, class: "label" %>
-        <%= form.datetime_select :lunch_out, {}, { class: "select" } %>
+        <%= form.label :lunch_out, "Lunch out (optional)", class: "label" %>
+        <%= form.datetime_field :lunch_out, class: "input", step: 60 %>
       </div>
     </div>
 

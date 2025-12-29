@@ -13,10 +13,13 @@ RSpec.describe "Registrations", type: :request do
           email: "lazaronixon@hey.com",
           password: "Secret1*3*5*",
           password_confirmation: "Secret1*3*5*",
-          contracted_hours: 37
+          contracted_hours: 37,
+          working_days_per_week: 5
         }
       end.to change(User, :count).by(1)
 
+      created_user = User.order(:id).last
+      expect(created_user.working_days_per_week).to eq(5)
       expect(response).to redirect_to(root_url)
     end
   end
@@ -28,7 +31,8 @@ RSpec.describe "Registrations", type: :request do
           email: "lazaronixon@hey.com",
           password: "short",
           password_confirmation: "short",
-          contracted_hours: 37
+          contracted_hours: 37,
+          working_days_per_week: 5
         }
       end.not_to change(User, :count)
 
