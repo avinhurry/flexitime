@@ -1,32 +1,34 @@
-<h1>Devices & Sessions</h1>
+<div class="card">
+  <p class="card-title">Security</p>
+  <h1 class="section-title">Devices &amp; Sessions</h1>
+  <p class="muted">Review active sessions and sign out any that look unfamiliar.</p>
 
-<div id="sessions">
-  <% @sessions.each do |session| %>
-    <div id="<%= dom_id session %>">
-      <p>
-        <strong>User Agent:</strong>
-        <%= session.user_agent %>
-      </p>
+  <div class="mt-6 overflow-x-auto">
+    <table class="table" id="sessions">
+      <thead>
+        <tr class="table-head">
+          <th class="pb-3 pl-2">User agent</th>
+          <th class="pb-3">IP address</th>
+          <th class="pb-3">Created at</th>
+          <th class="pb-3 pr-2 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @sessions.each do |session| %>
+          <tr id="<%= dom_id session %>">
+            <td class="table-cell rounded-l-2xl bg-white"><%= session.user_agent %></td>
+            <td class="table-cell bg-white"><%= session.ip_address %></td>
+            <td class="table-cell bg-white"><%= format_datetime(session.created_at) %></td>
+            <td class="table-cell rounded-r-2xl bg-white text-right">
+              <%= button_to "Log out", session, method: :delete, class: "btn-secondary", form: { class: "inline-block" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 
-      <p>
-        <strong>Ip Address:</strong>
-        <%= session.ip_address %>
-      </p>
-
-      <p>
-        <strong>Created at:</strong>
-        <%= session.created_at %>
-      </p>
-
-    </div>
-    <p>
-      <%= button_to "Log out", session, method: :delete %>
-    </p>
-  <% end %>
-</div>
-
-<br>
-
-<div>
-  <%= link_to "Back", root_path %>
+  <div class="mt-6">
+    <%= link_to "Back", root_path, class: "btn-ghost" %>
+  </div>
 </div>

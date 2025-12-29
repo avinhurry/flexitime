@@ -35,7 +35,7 @@ RSpec.feature "Sessions", type: :system do
     visit sign_in_url
     fill_in "Email", with: email
     fill_in "Password", with: password
-    click_on "Sign in"
+    click_button "Sign in"
   end
 
   def when_i_visit_sessions

@@ -1,21 +1,26 @@
-<p>Signed as <%= Current.user.email %></p>
+<div class="card max-w-lg">
+  <p class="card-title">Account</p>
+  <h1 class="section-title">Your settings</h1>
+  <p class="muted">Signed in as <strong><%= Current.user.email %></strong></p>
 
-<h2>Login and verification</h2>
+  <div class="mt-6 space-y-4">
+    <div>
+      <p class="muted">Login and verification</p>
+      <div class="mt-2 flex flex-wrap gap-3">
+        <%= link_to "Change password", edit_password_path, class: "btn-secondary" %>
+        <%= link_to "Change email", edit_identity_email_path, class: "btn-secondary" %>
+      </div>
+    </div>
 
-<div>
-  <%= link_to "Change password", edit_password_path %>
+    <div>
+      <p class="muted">Access history</p>
+      <div class="mt-2">
+        <%= link_to "Devices & Sessions", sessions_path, class: "btn-ghost" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <%= button_to "Log out", Current.session, method: :delete, class: "btn-secondary" %>
+  </div>
 </div>
-
-<div>
-  <%= link_to "Change email address", edit_identity_email_path %>
-</div>
-
-<h2>Access history</h2>
-
-<div>
-  <%= link_to "Devices & Sessions", sessions_path %>
-</div>
-
-<br>
-
-<%= button_to "Log out", Current.session, method: :delete %>

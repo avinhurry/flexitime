@@ -29,10 +29,10 @@ RSpec.describe "Time entries", type: :request do
 
           follow_redirect!
 
-          entry = TimeEntry.order(:id).last
-          expect(response.body).to include(entry.clock_in.strftime("%Y-%m-%d"))
-        end
-      end
+      entry = TimeEntry.order(:id).last
+      expect(response.body).to include(entry.clock_in.strftime("%-d %b %Y, %H:%M"))
+    end
+  end
 
       it "renders errors for invalid data" do
         post time_entries_path, params: { time_entry: { clock_in: Time.zone.now } }

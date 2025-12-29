@@ -5,7 +5,7 @@ module SystemHelpers
     visit sign_in_url
     fill_in "Email", with: user.email
     fill_in "Password", with: password
-    click_on "Sign in"
+    click_button "Sign in"
 
     expect(page).to have_current_path(root_url)
     user

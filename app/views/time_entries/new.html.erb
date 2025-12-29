@@ -1,48 +1,46 @@
-<h1>New Time Entry</h1>
+<div class="card">
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="card-title">New</p>
+      <h1 class="section-title">Add a time entry</h1>
+      <p class="muted">Log your start, finish, and any lunch break.</p>
+    </div>
+  </div>
 
-<%= form_with(model: @time_entry, local: true) do |form| %>
-  <% if @time_entry.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@time_entry.errors.count, "error") %> prohibited this time entry from being saved:</h2>
+  <%= form_with(model: @time_entry, local: true, class: "mt-6 space-y-5") do |form| %>
+    <% if @time_entry.errors.any? %>
+      <div class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+        <p class="font-semibold"><%= pluralize(@time_entry.errors.count, "error") %> prohibited this time entry from being saved:</p>
+        <ul class="mt-2 list-disc pl-4">
+          <% @time_entry.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-      <ul>
-        <% @time_entry.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+    <div class="grid gap-5 md:grid-cols-2">
+      <div>
+        <%= form.label :clock_in, class: "label" %>
+        <%= form.datetime_select :clock_in, {}, { class: "select" } %>
+      </div>
+      <div>
+        <%= form.label :clock_out, class: "label" %>
+        <%= form.datetime_select :clock_out, {}, { class: "select" } %>
+      </div>
+      <div>
+        <%= form.label :lunch_in, class: "label" %>
+        <%= form.datetime_select :lunch_in, {}, { class: "select" } %>
+      </div>
+      <div>
+        <%= form.label :lunch_out, class: "label" %>
+        <%= form.datetime_select :lunch_out, {}, { class: "select" } %>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <%= form.submit "Save entry", class: "btn" %>
+      <%= link_to "Back to time entries", time_entries_path, class: "btn-ghost" %>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :clock_in %>
-    <%= form.datetime_select :clock_in %>
-  </div>
-
-  <div class="field">
-    <%= form.label :clock_out %>
-    <%= form.datetime_select :clock_out %>
-  </div>
-
-<br>
-<br>
-
-  <div>
-    <%= form.label :lunch_in %>
-    <%= form.datetime_select :lunch_in %>
-  </div>
-
-   <div>
-    <%= form.label :lunch_out %>
-    <%= form.datetime_select :lunch_out %>
-  </div>
-
-<br>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-
-<br>
-
-  <%= link_to 'Back to Time Entries', time_entries_path %>
-<% end %>
+</div>

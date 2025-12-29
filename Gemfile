@@ -72,3 +72,6 @@ gem "dockerfile-rails", ">= 1.6", group: :development
 gem "authentication-zero", "~> 4.0"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
+
+# Utility-first CSS framework
+gem "tailwindcss-rails"

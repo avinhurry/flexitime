@@ -19,7 +19,7 @@ RSpec.feature "Registrations", type: :system do
     fill_in "Password", with: "Secret6*4*2*"
     fill_in "Password confirmation", with: "Secret6*4*2*"
     fill_in "Contracted hours", with: "37"
-    click_on "Sign up"
+    click_button "Sign up"
   end
 
   def then_i_see_flash(message)

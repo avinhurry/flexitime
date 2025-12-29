@@ -1,38 +1,78 @@
-<%= button_to "Log out", Current.session, method: :delete %>
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <div>
+    <h1 class="text-3xl font-semibold text-slate-900">Time Entries</h1>
+    <p class="muted">Week commencing <%= format_date(@work_week_start) %></p>
+  </div>
+  <div class="flex items-center gap-3">
+    <%= link_to "New Time Entry", new_time_entry_path, class: "btn" %>
+    <%= link_to "Previous Week", time_entries_path(week_start: @week_start - 7.days), class: "btn-ghost" %>
+    <%= link_to "Next Week", time_entries_path(week_start: @week_start + 7.days), class: "btn-ghost" %>
+  </div>
+</div>
 
-<h1>Time Entries</h1>
+<div class="mt-8 grid gap-6 md:grid-cols-2">
+  <div class="card">
+    <p class="card-title">This Week</p>
+    <p class="text-2xl font-semibold text-slate-900"><%= @total_hours %></p>
+    <p class="muted">Total Hours Worked this Week</p>
+  </div>
+  <div class="card">
+    <p class="card-title">Required</p>
+    <p class="text-2xl font-semibold text-slate-900"><%= @required_hours %></p>
+    <p class="muted">Required Hours this Week</p>
+  </div>
+</div>
 
-<%= link_to 'New Time Entry', new_time_entry_path %>
-
-<h2>Week commencing <%= @work_week_start.strftime('%-d %B %Y') %></h2>
-
-<p>Total Hours Worked this Week: <%= @total_hours %></p>
-<p>Required Hours this Week: <%= @required_hours %></p>
-
-<% if @hours_difference < 0 %>
-  <p>You need to work <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %> more hours this week to meet your required hours.</p>
-<% elsif @hours_difference > 0 %>
-  <p>You have worked <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %> more hours than required this week. Great job!</p>
-<% else %>
-  <p>You have met your required hours for this week.</p>
-<% end %>
-
-<%= link_to 'Previous Week', time_entries_path(week_start: @week_start - 7.days) %> |
-<%= link_to 'Next Week', time_entries_path(week_start: @week_start + 7.days) %>
-
-<ul>
-  <% @time_entries.each do |entry| %>
-    <li>
-      Clocked in: <%= entry.clock_in %><br>
-      Clocked out: <%= entry.clock_out || "Not clocked out yet" %><br>
-      Lunch Duration: <%= entry.lunch_duration_in_hours_and_minutes || 0 %> hours<br>
-      Hours Worked: <%= entry.hours_worked_in_hours_and_minutes %><br>
-      <%= link_to 'Edit', edit_time_entry_path(entry) %>
-       <%= form_with url: time_entry_path(entry), method: :delete, local: true, style: "display:inline;" do %>
-        <%= submit_tag 'Delete', data: { confirm: 'Are you sure?' } %>
-      <% end %>
-    </li><br>
+<p class="mt-6 text-sm text-slate-600">
+  <% if @hours_difference < 0 %>
+    You need to work <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %> more hours this week to meet your required hours.
+  <% elsif @hours_difference > 0 %>
+    You have worked <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %> more hours than required this week. Great job!
+  <% else %>
+    You have met your required hours for this week.
   <% end %>
-</ul>
+</p>
 
+<div class="mt-10">
+  <p class="card-title">Entries</p>
+  <h2 class="section-title">This week</h2>
 
+  <div class="mt-4 overflow-x-auto">
+    <table class="table">
+      <thead>
+        <tr class="table-head">
+          <th class="pb-3 pl-2">Clocked in</th>
+          <th class="pb-3">Clocked out</th>
+          <th class="pb-3">Lunch duration</th>
+          <th class="pb-3">Hours worked</th>
+          <th class="pb-3 pr-2 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @time_entries.each do |entry| %>
+          <tr>
+            <td class="table-cell rounded-l-2xl bg-white"><%= format_datetime(entry.clock_in) %></td>
+            <td class="table-cell bg-white"><%= entry.clock_out ? format_datetime(entry.clock_out) : "Not clocked out yet" %></td>
+            <td class="table-cell bg-white">
+              <% if entry.lunch_duration_in_minutes.to_i > 0 %>
+                <%= entry.lunch_duration_in_hours_and_minutes %>
+              <% else %>
+                <span class="text-slate-400">No lunch recorded</span>
+              <% end %>
+            </td>
+            <td class="table-cell bg-white"><%= entry.hours_worked_in_hours_and_minutes %></td>
+            <td class="table-cell rounded-r-2xl bg-white text-right">
+              <div class="flex items-center justify-end gap-2">
+                <%= link_to "Edit", edit_time_entry_path(entry), class: "btn-ghost" %>
+                <%= button_to "Delete", time_entry_path(entry), method: :delete,
+                  class: "btn-danger",
+                  data: { confirm: "Are you sure?" },
+                  form: { class: "inline-block" } %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

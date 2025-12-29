@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= content_for(:title) || "Flexitime" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -13,14 +13,45 @@
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <% flash.each do |key, message| %>
-      <p class="flash <%= key %>"><%= message %></p>
-    <% end %>
-    <%= yield %>
+  <body class="min-h-screen antialiased">
+    <header class="border-b border-black/5 bg-white/70 backdrop-blur">
+      <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-3">
+          <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand/10 text-sm font-semibold text-brand">
+            F
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">Flexitime</p>
+          </div>
+        </div>
+        <% nav_link = "text-sm text-slate-600 transition hover:text-slate-900" %>
+        <nav class="flex items-center gap-4">
+          <% if Current.user %>
+            <%= link_to "Today", root_path, class: nav_link %>
+            <%= link_to "New entry", new_time_entry_path, class: nav_link %>
+            <%= button_to "Log out", Current.session, method: :delete, class: "btn-secondary", form: { class: "inline-block" } %>
+          <% else %>
+            <%= link_to "Sign in", sign_in_path, class: nav_link %>
+            <%= link_to "Sign up", sign_up_path, class: "btn" %>
+          <% end %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-6 py-10">
+      <% flash.each do |key, message| %>
+        <% base = "mb-6 rounded-2xl border px-4 py-3 text-sm" %>
+        <% if key.to_s == "notice" %>
+          <div class="<%= base %> border-emerald-200 bg-emerald-50 text-emerald-900"><%= message %></div>
+        <% else %>
+          <div class="<%= base %> border-rose-200 bg-rose-50 text-rose-900"><%= message %></div>
+        <% end %>
+      <% end %>
+      <%= yield %>
+    </main>
   </body>
 </html>
