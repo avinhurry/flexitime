@@ -34,7 +34,7 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center rounded-full bg-orange-500 px-5 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-orange-600;
+    @apply inline-flex items-center justify-center rounded-full bg-brand px-5 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-brand-dark;
   }
 
   .btn-secondary {
@@ -46,7 +46,7 @@
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center rounded-full bg-rose-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-rose-600;
+    @apply inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-brand-dark;
   }
 
   .input {
@@ -90,6 +90,6 @@
   }
 
   .summary-negative {
-    @apply text-rose-600;
+    @apply text-brand;
   }
 }

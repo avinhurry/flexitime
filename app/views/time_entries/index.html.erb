@@ -37,15 +37,15 @@
           </p>
         <% elsif @hours_difference < -1 %>
           <p class="summary-negative text-2xl font-semibold">
-            Behind by <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
+           <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
           </p>
         <% elsif @hours_difference.negative? %>
           <p class="summary-neutral text-2xl font-semibold">
-            Remaining <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
+            <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
           </p>
         <% elsif @hours_difference.positive? %>
           <p class="summary-neutral text-2xl font-semibold">
-            Ahead by <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %>
+            <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %>
           </p>
         <% else %>
           <p class="summary-neutral text-2xl font-semibold">On track</p>
@@ -65,7 +65,6 @@
             <th class="pb-3 px-4">Clocked out</th>
             <th class="pb-3 px-4">Lunch duration</th>
             <th class="pb-3 px-4">Hours worked</th>
-            <th class="pb-3 px-4 text-right">Actions</th>
           </tr>
         </thead>
         <tbody>
