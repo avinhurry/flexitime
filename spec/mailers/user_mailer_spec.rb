@@ -8,7 +8,7 @@ RSpec.describe UserMailer, type: :mailer do
       mail = described_class.with(user: user).password_reset
 
       expect(mail.subject).to eq("Reset your password")
-      expect(mail.to).to eq([user.email])
+      expect(mail.to).to eq([ user.email ])
     end
   end
 
@@ -17,7 +17,7 @@ RSpec.describe UserMailer, type: :mailer do
       mail = described_class.with(user: user).email_verification
 
       expect(mail.subject).to eq("Verify your email")
-      expect(mail.to).to eq([user.email])
+      expect(mail.to).to eq([ user.email ])
     end
   end
 end
