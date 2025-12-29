@@ -31,7 +31,7 @@
           <p class="muted">On track</p>
         <% end %>
 
-        <% if @hours_difference > 1 %>
+        <% if @hours_difference.positive? %>
           <p class="summary-positive text-2xl font-semibold">
             <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %>
           </p>
@@ -42,10 +42,6 @@
         <% elsif @hours_difference.negative? %>
           <p class="summary-neutral text-2xl font-semibold">
             <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
-          </p>
-        <% elsif @hours_difference.positive? %>
-          <p class="summary-neutral text-2xl font-semibold">
-            <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %>
           </p>
         <% else %>
           <p class="summary-neutral text-2xl font-semibold">On track</p>
