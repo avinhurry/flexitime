@@ -46,7 +46,7 @@
       <% flash.each do |key, message| %>
         <% base = "mb-6 rounded-2xl border px-4 py-3 text-sm" %>
         <% if key.to_s == "notice" %>
-          <div class="<%= base %> border-emerald-200 bg-emerald-50 text-emerald-900"><%= message %></div>
+          <div class="<%= base %> border-brand/20 bg-brand/10 text-brand-dark"><%= message %></div>
         <% else %>
           <div class="<%= base %> border-rose-200 bg-rose-50 text-rose-900"><%= message %></div>
         <% end %>
