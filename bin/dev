@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+if command -v overmind >/dev/null 2>&1; then
+  exec overmind start -f Procfile.dev "$@"
+elif command -v foreman >/dev/null 2>&1; then
+  exec foreman start -f Procfile.dev "$@"
+else
+  echo "Missing a Procfile runner. Install overmind or foreman to use bin/dev." >&2
+  exit 1
+fi
