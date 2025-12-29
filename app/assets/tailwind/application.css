@@ -80,4 +80,16 @@
   .table-cell {
     @apply px-4 py-3 text-slate-700;
   }
+
+  .summary-positive {
+    @apply text-emerald-600;
+  }
+
+  .summary-neutral {
+    @apply text-slate-500;
+  }
+
+  .summary-negative {
+    @apply text-rose-600;
+  }
 }

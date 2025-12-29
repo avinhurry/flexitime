@@ -10,28 +10,46 @@
   </div>
 </div>
 
-<div class="mt-8 grid gap-6 md:grid-cols-2">
+<div class="mt-8">
   <div class="card">
-    <p class="card-title">This Week</p>
-    <p class="text-2xl font-semibold text-slate-900"><%= @total_hours %></p>
-    <p class="muted">Total Hours Worked this Week</p>
-  </div>
-  <div class="card">
-    <p class="card-title">Required</p>
-    <p class="text-2xl font-semibold text-slate-900"><%= @required_hours %></p>
-    <p class="muted">Required Hours this Week</p>
+    <p class="card-title">Weekly Summary</p>
+    <div class="mt-4 grid gap-6 text-center justify-items-center sm:grid-cols-3">
+      <div>
+        <p class="muted">Worked</p>
+        <p class="text-2xl font-semibold text-slate-900"><%= @total_hours %></p>
+      </div>
+      <div>
+        <p class="muted">Target</p>
+        <p class="text-2xl font-semibold text-slate-900"><%= @required_hours %></p>
+      </div>
+      <div>
+        <% if @hours_difference < 1 %>
+          <p class="muted">Remaining</p>
+        <% end %>
+        
+        <% if @hours_difference > 1 %>
+          <p class="summary-positive text-2xl font-semibold">
+            Ahead by <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %>
+          </p>
+        <% elsif @hours_difference < -1 %>
+          <p class="summary-negative text-2xl font-semibold">
+            <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
+          </p>
+        <% elsif @hours_difference.negative? %>
+          <p class="summary-neutral text-2xl font-semibold">
+            <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
+          </p>
+        <% elsif @hours_difference.positive? %>
+          <p class="summary-neutral text-2xl font-semibold">
+            Ahead by <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %>
+          </p>
+        <% else %>
+          <p class="summary-neutral text-2xl font-semibold">On track</p>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
-
-<p class="mt-6 text-sm text-slate-600">
-  <% if @hours_difference < 0 %>
-    You need to work <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %> more hours this week to meet your required hours.
-  <% elsif @hours_difference > 0 %>
-    You have worked <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %> more hours than required this week. Great job!
-  <% else %>
-    You have met your required hours for this week.
-  <% end %>
-</p>
 
 <div class="mt-10">
   <p class="card-title">Entries</p>
