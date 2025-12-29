@@ -30,6 +30,15 @@ RSpec.describe Identity::EmailVerificationsController, type: :request do
       end
     end
 
+    context "with an invalid token" do
+      it "redirects to the email edit page" do
+        get identity_email_verification_url(sid: "invalid-token", email: user.email)
+
+        expect(response).to redirect_to(edit_identity_email_url)
+        expect(flash[:alert]).to eq("That email verification link is invalid")
+      end
+    end
+
     context "with an expired token" do
       it "does not verify the email" do
         sid = user.generate_token_for(:email_verification)

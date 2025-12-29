@@ -1,6 +1,8 @@
 module AuthHelpers
-  def sign_in_as(user)
-    post sign_in_path, params: { email: user.email, password: "verysecurepasword1234@!" }
+  DEFAULT_PASSWORD = "verysecurepasword1234@!"
+
+  def sign_in_as(user, password: DEFAULT_PASSWORD)
+    post sign_in_path, params: { email: user.email, password: password }
     user.reload
   end
 end

@@ -1,3 +1,4 @@
+require "cgi"
 require "rails_helper"
 
 RSpec.describe Identity::PasswordResetsController, type: :request do
@@ -16,6 +17,13 @@ RSpec.describe Identity::PasswordResetsController, type: :request do
 
       get edit_identity_password_reset_url(sid:)
       expect(response).to be_successful
+    end
+
+    it "redirects when the token is invalid" do
+      get edit_identity_password_reset_url(sid: "invalid-token")
+
+      expect(response).to redirect_to(new_identity_password_reset_url)
+      expect(flash[:alert]).to eq("That password reset link is invalid")
     end
   end
 
@@ -65,6 +73,17 @@ RSpec.describe Identity::PasswordResetsController, type: :request do
 
         patch identity_password_reset_url, params: { sid:, password: "Secret6*4*2*", password_confirmation: "Secret6*4*2*" }
         expect(response).to redirect_to(sign_in_url)
+      end
+    end
+
+    context "with a password mismatch" do
+      it "renders the form with errors" do
+        sid = user.generate_token_for(:password_reset)
+
+        patch identity_password_reset_url, params: { sid:, password: "Secret6*4*2*", password_confirmation: "Mismatch1*2*" }
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(CGI.unescapeHTML(response.body)).to include("Password confirmation doesn't match")
       end
     end
 

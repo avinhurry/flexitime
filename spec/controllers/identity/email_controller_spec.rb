@@ -24,10 +24,20 @@ RSpec.describe Identity::EmailsController, type: :request do
       end
     end
 
+    context "when the email is unchanged" do
+      it "does not enqueue a verification email" do
+        expect {
+          patch identity_email_path, params: { email: user.email, password_challenge: "verysecurepasword1234@!" }
+        }.not_to have_enqueued_mail(UserMailer, :email_verification)
+
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
     context "with invalid password challenge" do
       it "does not update the email and renders unprocessable entity" do
         patch identity_email_path, params: { email: "new_email@hey.com", password_challenge: "SecretWrong1*3" }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include("Password challenge is invalid")
         user.reload
         expect(user.email).to eq("lazaro@example.com")

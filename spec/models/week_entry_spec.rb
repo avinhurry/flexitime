@@ -7,29 +7,64 @@ RSpec.describe WeekEntry, type: :model do
     user.time_entries.create!(clock_in: clock_in, clock_out: clock_out)
   end
 
-  it "carries prior week offset into required minutes and recomputes" do
-    user = create(:user, email: "user@example.com")
-    week1_start = Date.new(2025, 3, 3)
+  context "when prior week balances exist" do
+    it "carries prior week offset into required minutes and recomputes" do
+      user = create(:user, email: "user@example.com")
+      week1_start = Date.new(2025, 3, 3)
 
-    4.times do |i|
-      create_shift(user, week1_start + i.days, 10)
+      4.times do |i|
+        create_shift(user, week1_start + i.days, 10)
+      end
+
+      week1_entry = user.week_entries.find_by(beginning_of_week: week1_start.beginning_of_week(:monday))
+      expect(week1_entry.offset_in_minutes).to eq(180)
+
+      week2_start = week1_start + 7.days
+      expected_required = (user.contracted_hours * 60) - 180
+      expect(described_class.required_minutes_for(user, week2_start)).to eq(expected_required)
+
+      create_shift(user, week2_start, 8)
+      week2_entry = user.week_entries.find_by(beginning_of_week: week2_start.beginning_of_week(:monday))
+      expect(week2_entry.required_minutes).to eq(expected_required)
+
+      first_entry = user.time_entries.order(:clock_in).first
+      first_entry.update!(clock_out: first_entry.clock_in + 7.hours)
+
+      week2_entry.reload
+      expect(week2_entry.required_minutes).to eq(user.contracted_hours * 60)
     end
+  end
 
-    week1_entry = user.week_entries.find_by(beginning_of_week: week1_start.beginning_of_week(:monday))
-    expect(week1_entry.offset_in_minutes).to eq(180)
+  context "when no prior week entry exists" do
+    it "uses contracted hours as the required minutes" do
+      user = create(:user, email: "user@example.com")
+      week_start = Date.new(2025, 3, 3)
 
-    week2_start = week1_start + 7.days
-    expected_required = (user.contracted_hours * 60) - 180
-    expect(WeekEntry.required_minutes_for(user, week2_start)).to eq(expected_required)
+      expect(described_class.required_minutes_for(user, week_start)).to eq(user.contracted_hours * 60)
+    end
+  end
 
-    create_shift(user, week2_start, 8)
-    week2_entry = user.week_entries.find_by(beginning_of_week: week2_start.beginning_of_week(:monday))
-    expect(week2_entry.required_minutes).to eq(expected_required)
+  context "when a week entry already exists" do
+    it "returns the stored required minutes" do
+      user = create(:user, email: "user@example.com")
+      week_start = Date.new(2025, 3, 3).beginning_of_week(:monday)
+      entry = user.week_entries.create!(beginning_of_week: week_start, required_minutes: 120)
 
-    first_entry = user.time_entries.order(:clock_in).first
-    first_entry.update!(clock_out: first_entry.clock_in + 7.hours)
+      expect(described_class.required_minutes_for(user, week_start)).to eq(entry.required_minutes)
+    end
+  end
 
-    week2_entry.reload
-    expect(week2_entry.required_minutes).to eq(user.contracted_hours * 60)
+  context "when the last entry in a week is removed" do
+    it "removes the week entry" do
+      user = create(:user, email: "user@example.com")
+      week_start = Date.new(2025, 3, 3)
+
+      entry = create_shift(user, week_start, 8)
+      expect(user.week_entries.find_by(beginning_of_week: week_start.beginning_of_week(:monday))).to be_present
+
+      entry.destroy
+
+      expect(user.week_entries.find_by(beginning_of_week: week_start.beginning_of_week(:monday))).to be_nil
+    end
   end
 end

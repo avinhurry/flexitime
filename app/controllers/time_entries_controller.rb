@@ -26,7 +26,7 @@ class TimeEntriesController < ApplicationController
       week_start = TimeEntry.work_week_range(@time_entry.clock_in).begin.to_date
       redirect_to time_entries_path(week_start: week_start), notice: "Time entry recorded successfully."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -41,7 +41,7 @@ class TimeEntriesController < ApplicationController
       week_start = TimeEntry.work_week_range(@time_entry.clock_in).begin.to_date
       redirect_to time_entries_path(week_start: week_start), notice: "Time entry updated successfully."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
