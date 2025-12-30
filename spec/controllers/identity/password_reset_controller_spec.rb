@@ -4,14 +4,14 @@ require "rails_helper"
 RSpec.describe Identity::PasswordResetsController, type: :request do
   let(:user) { create(:user) }
 
-  describe "GET /identity/password_reset/new" do
+  describe "GET /identity/password-reset/new" do
     it "should get new" do
       get new_identity_password_reset_url
       expect(response).to be_successful
     end
   end
 
-  describe "GET /identity/password_reset/edit" do
+  describe "GET /identity/password-reset/edit" do
     it "should get edit" do
       sid = user.generate_token_for(:password_reset)
 
@@ -27,7 +27,7 @@ RSpec.describe Identity::PasswordResetsController, type: :request do
     end
   end
 
-  describe "POST /identity/password_reset" do
+  describe "POST /identity/password-reset" do
     context "with a valid email" do
       it "should send a password reset email" do
         expect do
@@ -52,7 +52,7 @@ RSpec.describe Identity::PasswordResetsController, type: :request do
     end
   end
 
-  describe "PATCH /identity/password_reset" do
+  describe "PATCH /identity/password-reset" do
     context "with a valid token" do
       it "should update the password" do
         sid = user.generate_token_for(:password_reset)
