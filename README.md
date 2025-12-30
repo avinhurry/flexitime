@@ -12,6 +12,9 @@ breaks, and weekly hour balances.
 It's designed around compressed working weeks (37 hours by default), with
 carry-over between weeks so overtime or shortfalls roll forward automatically.
 
+I built Flexitime to track my own compressed working week, without the
+complexity of a full HR system.
+
 ## Features
 - Clock in / clock out with optional lunch breaks
 - Weekly totals showing required hours and running balance
