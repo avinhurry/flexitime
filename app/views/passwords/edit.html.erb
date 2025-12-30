@@ -28,6 +28,7 @@
     <div>
       <%= form.label :password_confirmation, "Confirm new password", class: "label" %>
       <%= form.password_field :password_confirmation, class: "input", required: true, autocomplete: "new-password" %>
+      <p class="muted mt-1">12 characters minimum.</p>
     </div>
 
     <div class="flex flex-wrap items-center gap-3">
