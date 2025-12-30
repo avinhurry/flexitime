@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="app/assets/images/FLEXITIME_LOGO_COMBINATION.png" alt="Flexitime" width="420">
+</p>
+
 # Flexitime
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
@@ -10,10 +14,26 @@ carry-over between weeks so overtime or shortfalls roll forward automatically.
 
 ## Features
 - Clock in / clock out with optional lunch breaks
-- Weekly totals showing required hours and balance
-- Carry over of credit/debt between weeks
+- Weekly totals showing required hours and running balance
+- Automatic carry over of credit/debt between weeks
 - Configurable contracted hours and working days per user
-- Personal time tracking workflow (not a full HR system)
+- Simple personal time tracking workflow (not a full HR system)
+
+## Screenshots
+
+Here's a quick look at the core screens.
+
+### Weekly summary
+Shows worked hours, target, and remaining balance, alongside the weekly entries list.
+<p align="center">
+  <img src="app/assets/images/weekly_summary_screenshot.png" alt="Weekly summary" width="900">
+</p>
+
+### New entry screen
+Log your start/finish times and optional lunch breaks.
+<p align="center">
+  <img src="app/assets/images/new_time_entry_screenshot.png" alt="New time entry" width="900">
+</p>
 
 ## Requirements
 - Ruby (see `.tool-versions`)
@@ -43,4 +63,4 @@ bundle exec rspec
 ## Notes
 - Weeks start on Monday (Mon-Sun).
 - Required hours for the week are adjusted using the previous week's balance.
-- Built originally for personal use, so it's pragmatic rather than feature heavy.
+- Originally built for personal use, and focused on being simple and reliable.
