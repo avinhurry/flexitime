@@ -10,7 +10,7 @@ class RegistrationsController < ApplicationController
 
     if @user.save
       send_email_verification
-      redirect_to root_path, notice: "Welcome! You have signed up successfully"
+      redirect_to root_path, notice: "User account created successfully"
     else
       render :new, status: :unprocessable_content
     end
