@@ -18,12 +18,12 @@
 
     <div>
       <%= form.label :contracted_hours, class: "label" %>
-      <%= form.number_field :contracted_hours, class: "input", required: true, min: 1, max: 80 %>
+      <%= form.number_field :contracted_hours, class: "input w-24 text-center", required: true, min: 1, max: 80 %>
     </div>
 
     <div>
       <%= form.label :working_days_per_week, "Working days per week", class: "label" %>
-      <%= form.number_field :working_days_per_week, class: "input", required: true, min: 1, max: 7 %>
+      <%= form.number_field :working_days_per_week, class: "input w-24 text-center", required: true, min: 1, max: 7 %>
     </div>
 
     <div class="flex flex-wrap items-center gap-3">
