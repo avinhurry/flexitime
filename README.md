@@ -63,6 +63,9 @@ Then visit: http://localhost:3000
 bundle exec rspec
 ```
 
+## Documentation
+- Domain model: [documentation/domain-model.md](documentation/domain-model.md)
+
 ## Notes
 - Weeks start on Monday (Mon-Sun).
 - Required hours for the week are adjusted using the previous week's balance.
