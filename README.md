@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="app/assets/images/FLEXITIME_LOGO_COMBINATION.png" alt="Flexitime" width="420" style="border-radius: 50%;">
+  <img src="app/assets/images/FLEXITIME_LOGO_COMBINATION.png" alt="Flexitime" width="420">
 </p>
 
 # Flexitime
