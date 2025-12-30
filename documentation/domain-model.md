@@ -17,6 +17,7 @@ erDiagram
     datetime updated_at
     integer contracted_hours
     integer working_days_per_week
+    boolean admin
   }
   TimeEntry {
     integer id

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_29_221956) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_30_150406) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_29_221956) do
     t.datetime "updated_at", null: false
     t.integer "contracted_hours", default: 37
     t.integer "working_days_per_week", default: 5, null: false
+    t.boolean "admin", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
