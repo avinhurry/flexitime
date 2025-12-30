@@ -31,7 +31,7 @@
         <% nav_link = "text-sm text-slate-600 transition hover:text-slate-900" %>
         <nav class="flex items-center gap-4">
           <% if Current.user %>
-            <%= link_to "Today", root_path, class: nav_link %>
+            <%= link_to "Time entries", root_path, class: nav_link %>
             <%= link_to "New entry", new_time_entry_path, class: nav_link %>
             <%= button_to "Log out", Current.session, method: :delete, class: "btn-secondary", form: { class: "inline-block" } %>
           <% else %>
