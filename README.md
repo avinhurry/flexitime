@@ -26,23 +26,23 @@ complexity of a full HR system.
 
 Here's a quick look at the core screens.
 
-### Weekly summary
+### Time entries
 Shows worked hours, target, and remaining balance, alongside the weekly entries list.
 <p align="center">
-  <img src="app/assets/images/weekly_summary_screenshot.png" alt="Weekly summary" width="900">
+  <img src="app/assets/images/screenshots/weekly_summary_screenshot.png" alt="Weekly summary" width="900">
 </p>
 
 ### New entry screen
 Log your start/finish times and optional lunch breaks.
 <p align="center">
-  <img src="app/assets/images/new_time_entry_screenshot.png" alt="New time entry" width="900">
+  <img src="app/assets/images/screenshots/new_time_entry_screenshot.png" alt="New time entry" width="900">
 </p>
 
 ### Account settings
 
-Manage your email, password, and work schedule.
+Manage your email, password and work schedule.
 <p align="center">
-  <img src="app/assets/images/settings_screenshot.png" alt="Account settings" width="900">
+  <img src="app/assets/images/screenshots/account_screenshot.png" alt="Account settings" width="900">
 </p>
 
 ## Requirements
