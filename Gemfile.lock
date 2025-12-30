@@ -141,6 +141,8 @@ GEM
       net-smtp
     marcel (1.1.0)
     matrix (0.4.2)
+    mermaid_erd (0.1.1)
+      rails (~> 8.0)
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
@@ -356,6 +358,7 @@ DEPENDENCIES
   dockerfile-rails (>= 1.6)
   factory_bot_rails
   importmap-rails
+  mermaid_erd
   pg (~> 1.6)
   pry
   puma (>= 5.0)

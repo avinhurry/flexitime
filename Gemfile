@@ -60,6 +60,9 @@ group :development do
 
   # Debugging
   gem "pry"
+
+  # Generate Mermaid ER diagrams from Rails models as Markdown-friendly output
+  gem "mermaid_erd"
 end
 
 group :test do
