@@ -28,31 +28,33 @@
             <%= image_tag "FLEXITIME_LOGO_TEXT_MONO.png", class: "h-10 w-auto mt-2", alt: "Flexitime" %>
           <% end %>
         </div>
-        <% nav_link = "text-sm text-slate-600 transition hover:text-slate-900" %>
+        <% nav_link = "inline-flex items-center text-sm text-slate-600 transition hover:text-slate-900 pb-1" %>
+        <% nav_link_active = "border-b-2 border-slate-900 text-slate-900" %>
         <% dropdown_link = "block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50" %>
+        <% dropdown_link_active = "bg-slate-50 text-slate-900 font-medium" %>
+        <% time_entries_active = controller_name == "time_entries" && !%w[new create].include?(action_name) %>
+        <% new_entry_active = controller_name == "time_entries" && %w[new create].include?(action_name) %>
+        <% account_active = ["home", "passwords", "work_schedules", "sessions"].include?(controller_name) || controller_path == "identity/emails" %>
+        <% create_user_active = controller_name == "registrations" %>
         <nav class="flex items-center gap-4">
           <% if Current.user %>
             <div class="hidden items-center gap-4 md:flex">
-              <%= link_to "Time entries", root_path, class: nav_link %>
-              <%= link_to "New entry", new_time_entry_path, class: nav_link %>
-              <%= link_to "Account", account_path, class: nav_link %>
+              <%= link_to "Time entries", root_path, class: [nav_link, (time_entries_active ? nav_link_active : nil)].compact.join(" ") %>
+              <%= link_to "New entry", new_time_entry_path, class: [nav_link, (new_entry_active ? nav_link_active : nil)].compact.join(" ") %>
+              <%= link_to "Account", account_path, class: [nav_link, (account_active ? nav_link_active : nil)].compact.join(" ") %>
               <% if Current.user.admin? %>
-                <%= link_to "Create user", sign_up_path, class: nav_link %>
+                <%= link_to "Create user", sign_up_path, class: [nav_link, (create_user_active ? nav_link_active : nil)].compact.join(" ") %>
               <% end %>
-              <%= button_to "Log out", Current.session, method: :delete, class: "btn-secondary", form: { class: "inline-block" } %>
             </div>
             <details class="relative md:hidden">
               <summary class="btn-secondary cursor-pointer list-none">Menu</summary>
               <div class="absolute right-0 mt-2 w-48 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-lg">
-                <%= link_to "Time entries", root_path, class: dropdown_link %>
-                <%= link_to "New entry", new_time_entry_path, class: dropdown_link %>
-                <%= link_to "Account", account_path, class: dropdown_link %>
+                <%= link_to "Time entries", root_path, class: [dropdown_link, (time_entries_active ? dropdown_link_active : nil)].compact.join(" ") %>
+                <%= link_to "New entry", new_time_entry_path, class: [dropdown_link, (new_entry_active ? dropdown_link_active : nil)].compact.join(" ") %>
+                <%= link_to "Account", account_path, class: [dropdown_link, (account_active ? dropdown_link_active : nil)].compact.join(" ") %>
                 <% if Current.user.admin? %>
-                  <%= link_to "Create user", sign_up_path, class: dropdown_link %>
+                  <%= link_to "Create user", sign_up_path, class: [dropdown_link, (create_user_active ? dropdown_link_active : nil)].compact.join(" ") %>
                 <% end %>
-                <%= button_to "Log out", Current.session, method: :delete,
-                  class: "#{dropdown_link} w-full text-left",
-                  form: { class: "block" } %>
               </div>
             </details>
           <% else %>
