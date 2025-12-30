@@ -75,7 +75,6 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.3)
-    authentication-zero (4.0.3)
     base64 (0.3.0)
     bcrypt (3.1.20)
     benchmark (0.5.0)
@@ -127,9 +126,6 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    jbuilder (2.14.1)
-      actionview (>= 7.0.0)
-      activesupport (>= 7.0.0)
     json (2.18.0)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
@@ -240,10 +236,6 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    redis (5.4.1)
-      redis-client (>= 0.22.0)
-    redis-client (0.26.1)
-      connection_pool
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
@@ -356,7 +348,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  authentication-zero (~> 4.0)
   bcrypt (~> 3.1.7)
   bootsnap
   brakeman
@@ -365,12 +356,10 @@ DEPENDENCIES
   dockerfile-rails (>= 1.6)
   factory_bot_rails
   importmap-rails
-  jbuilder
   pg (~> 1.6)
   pry
   puma (>= 5.0)
   rails (~> 8.0.2)
-  redis (>= 4.0.1)
   rspec-rails (~> 8.0.2)
   rubocop (~> 1.82)
   rubocop-rails-omakase
@@ -381,6 +370,9 @@ DEPENDENCIES
   turbo-rails
   tzinfo-data
   web-console
+
+RUBY VERSION
+   ruby 3.4.6p54
 
 BUNDLED WITH
    2.5.18
