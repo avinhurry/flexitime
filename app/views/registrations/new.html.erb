@@ -23,7 +23,7 @@
 
     <div>
       <%= form.label :contracted_hours, class: "label" %>
-      <%= form.number_field :contracted_hours, class: "input", required: true, autocomplete: "contracted-hours" %>
+      <%= form.number_field :contracted_hours, class: "input", required: true, min: 1, max: 80, autocomplete: "contracted-hours" %>
     </div>
 
     <div>

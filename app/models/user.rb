@@ -4,6 +4,7 @@ class User < ApplicationRecord
 
   has_secure_password
 
+  attribute :contracted_hours, :integer, default: 37
   attribute :working_days_per_week, :integer, default: 5
 
   generates_token_for :password_reset, expires_in: 20.minutes do
@@ -15,6 +16,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, allow_nil: true, length: { minimum: 12 }
+  validates :contracted_hours, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 80 }
   validates :working_days_per_week, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 7 }
 
   normalizes :email, with: -> { _1.strip.downcase }

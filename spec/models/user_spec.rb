@@ -46,4 +46,29 @@ RSpec.describe User, type: :model do
       expect(user.errors[:working_days_per_week]).to be_empty
     end
   end
+
+  context "when contracted hours are out of range" do
+    it "is invalid" do
+      user = described_class.new(email: "user@example.com", password: password, contracted_hours: 0)
+      user.validate
+
+      expect(user.errors[:contracted_hours]).to be_present
+    end
+
+    it "is invalid when above the max" do
+      user = described_class.new(email: "user@example.com", password: password, contracted_hours: 81)
+      user.validate
+
+      expect(user.errors[:contracted_hours]).to be_present
+    end
+  end
+
+  context "when contracted hours are within range" do
+    it "is valid" do
+      user = described_class.new(email: "user@example.com", password: password, contracted_hours: 40)
+      user.validate
+
+      expect(user.errors[:contracted_hours]).to be_empty
+    end
+  end
 end
