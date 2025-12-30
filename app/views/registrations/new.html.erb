@@ -3,7 +3,7 @@
   <h1 class="section-title">Create a user</h1>
   <p class="muted">Create an account for someone else and set their weekly hours.</p>
 
-  <%= form_with(url: sign_up_path, class: "mt-6 space-y-4") do |form| %>
+  <%= form_with(url: sign_up_path, data: { turbo: false }, class: "mt-6 space-y-4") do |form| %>
     <% if @user.errors.any? %>
       <div class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
         <p class="font-semibold"><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</p>
