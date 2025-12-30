@@ -32,10 +32,12 @@
           <% if Current.user %>
             <%= link_to "Time entries", root_path, class: nav_link %>
             <%= link_to "New entry", new_time_entry_path, class: nav_link %>
+            <% if Current.user.admin? %>
+              <%= link_to "Create user", sign_up_path, class: nav_link %>
+            <% end %>
             <%= button_to "Log out", Current.session, method: :delete, class: "btn-secondary", form: { class: "inline-block" } %>
           <% else %>
             <%= link_to "Sign in", sign_in_path, class: nav_link %>
-            <%= link_to "Sign up", sign_up_path, class: "btn" %>
           <% end %>
         </nav>
       </div>

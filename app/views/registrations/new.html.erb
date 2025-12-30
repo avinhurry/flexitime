@@ -1,7 +1,7 @@
 <div class="card mx-auto max-w-lg">
-  <p class="card-title">Get started</p>
-  <h1 class="section-title">Create your account</h1>
-  <p class="muted">Set your weekly hours and start tracking flexitime.</p>
+  <p class="card-title">Admin</p>
+  <h1 class="section-title">Create a user</h1>
+  <p class="muted">Create an account for someone else and set their weekly hours.</p>
 
   <%= form_with(url: sign_up_path, class: "mt-6 space-y-4") do |form| %>
     <% if @user.errors.any? %>
@@ -42,8 +42,8 @@
     </div>
 
     <div class="flex flex-wrap items-center gap-3">
-      <%= form.submit "Sign up", class: "btn" %>
-      <%= link_to "Already have an account?", sign_in_path, class: "btn-ghost" %>
+      <%= form.submit "Create user", class: "btn" %>
+      <%= link_to "Back to app", root_path, class: "btn-ghost" %>
     </div>
   <% end %>
 </div>

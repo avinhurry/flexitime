@@ -23,7 +23,7 @@ RSpec.feature "Sessions", type: :system do
       given_i_am_signed_in_as(user)
       when_i_sign_out
 
-      then_i_see_flash("That session has been logged out")
+      then_i_see_flash("Signed out successfully")
     end
   end
 

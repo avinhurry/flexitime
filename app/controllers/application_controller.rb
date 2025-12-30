@@ -4,15 +4,21 @@ class ApplicationController < ActionController::Base
 
   private
     def authenticate
-      if session_record = Session.find_by_id(cookies.signed[:session_token])
-        Current.session = session_record
-      else
-        redirect_to sign_in_path
-      end
+      session_record = Session.find_by_id(cookies.signed[:session_token])
+      Current.session = session_record
+      Current.user = session_record&.user
+
+      return if Current.user
+
+      handle_unauthenticated
     end
 
     def set_current_request_details
       Current.user_agent = request.user_agent
       Current.ip_address = request.ip
+    end
+
+    def handle_unauthenticated
+      redirect_to sign_in_path
     end
 end

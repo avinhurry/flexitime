@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  skip_before_action :authenticate
+  before_action :require_admin_for_signup, only: %i[ new create ]
 
   def new
     @user = User.new
@@ -9,9 +9,6 @@ class RegistrationsController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      session_record = @user.sessions.create!
-      cookies.signed.permanent[:session_token] = { value: session_record.id, httponly: true }
-
       send_email_verification
       redirect_to root_path, notice: "Welcome! You have signed up successfully"
     else
@@ -20,6 +17,21 @@ class RegistrationsController < ApplicationController
   end
 
   private
+    def require_admin_for_signup
+      return if Current.user&.admin?
+
+      redirect_to sign_in_path,
+        alert: invite_only_message
+    end
+
+    def handle_unauthenticated
+      redirect_to sign_in_path, alert: invite_only_message
+    end
+
+    def invite_only_message
+      "Sign-ups are closed. This app is invite-only - contact me if you need access."
+    end
+
     def user_params
       params.permit(:email, :password, :password_confirmation, :contracted_hours, :working_days_per_week)
     end

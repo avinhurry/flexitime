@@ -35,9 +35,9 @@ RSpec.describe "Sessions", type: :request do
     sign_in_as(user)
 
     delete session_url(user.sessions.last)
-    expect(response).to redirect_to(sessions_url)
+    expect(response).to redirect_to(sign_in_url)
 
     follow_redirect!
-    expect(response).to redirect_to(sign_in_url)
+    expect(response).to be_successful
   end
 end

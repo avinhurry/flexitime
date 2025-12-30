@@ -13,7 +13,11 @@ class SessionsController < ApplicationController
   def create
     if user = User.authenticate_by(email: params[:email], password: params[:password])
       @session = user.sessions.create!
-      cookies.signed.permanent[:session_token] = { value: @session.id, httponly: true }
+      cookies.signed.permanent[:session_token] = {
+        value: @session.id,
+        httponly: true,
+        secure: Rails.env.production?
+      }
 
       redirect_to root_path, notice: "Signed in successfully"
     else
@@ -22,7 +26,15 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    @session.destroy; redirect_to(sessions_path, notice: "That session has been logged out")
+    current_session = Current.session
+
+    @session.destroy
+    if current_session == @session
+      cookies.delete(:session_token)
+      redirect_to sign_in_path, notice: "Signed out successfully"
+    else
+      redirect_to sessions_path, notice: "That session has been logged out"
+    end
   end
 
   private
