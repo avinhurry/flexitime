@@ -6,6 +6,8 @@ class TimeEntry < ApplicationRecord
 
   validates :clock_in, :clock_out, presence: true
 
+  attr_accessor :lunch_in_time, :lunch_out_time
+
   after_save :recalculate_week_entries
   after_destroy :recalculate_week_entries
 
@@ -30,6 +32,18 @@ class TimeEntry < ApplicationRecord
     return 0 unless lunch_out && lunch_in
 
     ((lunch_out - lunch_in) / 1.minute).round
+  end
+
+  def lunch_in_time
+    return @lunch_in_time if instance_variable_defined?(:@lunch_in_time)
+
+    lunch_in&.strftime("%H:%M")
+  end
+
+  def lunch_out_time
+    return @lunch_out_time if instance_variable_defined?(:@lunch_out_time)
+
+    lunch_out&.strftime("%H:%M")
   end
 
   def lunch_duration
