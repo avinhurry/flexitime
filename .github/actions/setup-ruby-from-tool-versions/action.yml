@@ -1,0 +1,14 @@
+name: Setup Ruby from .tool-versions
+description: Install Ruby using the version from .tool-versions with bundler cache enabled.
+runs:
+  using: composite
+  steps:
+    - name: Read Ruby version
+      id: ruby_version
+      shell: bash
+      run: echo "version=$(awk '/^ruby /{print $2}' .tool-versions)" >> $GITHUB_OUTPUT
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ steps.ruby_version.outputs.version }}
+        bundler-cache: true
