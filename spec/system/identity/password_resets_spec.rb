@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Password resets", type: :system do
-  let(:user) { create(:user, email: "user@example.com", verified: true) }
+  let(:user) { create(:user, email: "user@example.com") }
 
   context "when requesting a reset" do
     scenario "sends reset instructions" do

@@ -1,9 +1,9 @@
 <div class="card mx-auto w-full max-w-lg">
-  <p class="card-title">Account</p>
-  <h1 class="section-title">Change your email</h1>
-  <p class="muted">Update the address you use to sign in.</p>
+  <p class="card-title">Schedule</p>
+  <h1 class="section-title">Edit work schedule</h1>
+  <p class="muted">Update your contracted hours and working days.</p>
 
-  <%= form_with(url: identity_email_path, method: :patch, class: "mt-6 space-y-4") do |form| %>
+  <%= form_with(model: @user, url: work_schedule_path, method: :patch, class: "mt-6 space-y-4") do |form| %>
     <% if @user.errors.any? %>
       <div class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
         <p class="font-semibold"><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</p>
@@ -16,13 +16,13 @@
     <% end %>
 
     <div>
-      <%= form.label :email, "New email", class: "label" %>
-      <%= form.email_field :email, class: "input", required: true, autofocus: true %>
+      <%= form.label :contracted_hours, class: "label" %>
+      <%= form.number_field :contracted_hours, class: "input", required: true, min: 1 %>
     </div>
 
     <div>
-      <%= form.label :password_challenge, "Password", class: "label" %>
-      <%= form.password_field :password_challenge, class: "input", required: true, autocomplete: "current-password" %>
+      <%= form.label :working_days_per_week, "Working days per week", class: "label" %>
+      <%= form.number_field :working_days_per_week, class: "input", required: true, min: 1, max: 7 %>
     </div>
 
     <div class="flex flex-wrap items-center gap-3">

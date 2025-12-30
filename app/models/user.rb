@@ -6,9 +6,6 @@ class User < ApplicationRecord
 
   attribute :working_days_per_week, :integer, default: 5
 
-  generates_token_for :email_verification, expires_in: 2.days do
-    email
-  end
   generates_token_for :password_reset, expires_in: 20.minutes do
     password_salt.last(10)
   end
@@ -21,10 +18,6 @@ class User < ApplicationRecord
   validates :working_days_per_week, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 7 }
 
   normalizes :email, with: -> { _1.strip.downcase }
-
-  before_validation if: :email_changed?, on: :update do
-    self.verified = false
-  end
 
   after_update if: :password_digest_previously_changed? do
     sessions.where.not(id: Current.session).delete_all

@@ -1,23 +1,36 @@
-<div class="card max-w-lg">
-  <p class="card-title">Account</p>
-  <h1 class="section-title">Your settings</h1>
-  <p class="muted">Signed in as <strong><%= Current.user.email %></strong></p>
+<div class="card mx-auto w-full max-w-2xl text-center">
+  <h1 class="section-title">Account</h1>
+  <p class="muted">Signed in as <strong><%= @user.email %></strong></p>
 
-  <div class="mt-6 space-y-4">
+  <div class="mt-6 space-y-8">
     <div>
-      <p class="muted">Login and verification</p>
-      <div class="mt-2 flex flex-wrap gap-3">
-        <%= link_to "Change password", edit_password_path, class: "btn-secondary" %>
+      <p class="muted">Email and password</p>
+      <div class="mt-2 flex flex-wrap justify-center gap-3">
         <%= link_to "Change email", edit_identity_email_path, class: "btn-secondary" %>
+        <%= link_to "Change password", edit_password_path, class: "btn-secondary" %>
       </div>
     </div>
 
     <div>
-      <p class="muted">Access history</p>
-      <div class="mt-2">
-        <%= link_to "Devices & Sessions", sessions_path, class: "btn-ghost" %>
+
+      <p class="muted mt-1">Contracted hours and working days</p>
+
+      <div class="mt-4 grid gap-3 sm:grid-cols-2">
+        <div class="rounded-2xl border border-black/10 bg-slate-50 px-3 py-2 text-xs">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Contracted hours</p>
+          <p class="text-base font-semibold text-slate-900"><%= @user.contracted_hours %></p>
+        </div>
+        <div class="rounded-2xl border border-black/10 bg-slate-50 px-3 py-2 text-xs">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Working days per week</p>
+          <p class="text-base font-semibold text-slate-900"><%= @user.working_days_per_week %></p>
+        </div>
+      </div>
+
+      <div class="mt-4 flex justify-center">
+        <%= link_to "Edit work schedule", edit_work_schedule_path, class: "btn-secondary" %>
       </div>
     </div>
+
   </div>
 
   <div class="mt-6">

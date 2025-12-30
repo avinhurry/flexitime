@@ -25,11 +25,8 @@ RSpec.describe Identity::EmailsController, type: :request do
     end
 
     context "when the email is unchanged" do
-      it "does not enqueue a verification email" do
-        expect {
-          patch identity_email_path, params: { email: user.email, password_challenge: "verysecurepasword1234@!" }
-        }.not_to have_enqueued_mail(UserMailer, :email_verification)
-
+      it "redirects to root" do
+        patch identity_email_path, params: { email: user.email, password_challenge: "verysecurepasword1234@!" }
         expect(response).to redirect_to(root_url)
       end
     end

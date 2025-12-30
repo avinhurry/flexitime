@@ -34,6 +34,7 @@
             <div class="hidden items-center gap-4 md:flex">
               <%= link_to "Time entries", root_path, class: nav_link %>
               <%= link_to "New entry", new_time_entry_path, class: nav_link %>
+              <%= link_to "Account", account_path, class: nav_link %>
               <% if Current.user.admin? %>
                 <%= link_to "Create user", sign_up_path, class: nav_link %>
               <% end %>
@@ -44,6 +45,7 @@
               <div class="absolute right-0 mt-2 w-48 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-lg">
                 <%= link_to "Time entries", root_path, class: dropdown_link %>
                 <%= link_to "New entry", new_time_entry_path, class: dropdown_link %>
+                <%= link_to "Account", account_path, class: dropdown_link %>
                 <% if Current.user.admin? %>
                   <%= link_to "Create user", sign_up_path, class: dropdown_link %>
                 <% end %>

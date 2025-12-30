@@ -18,17 +18,7 @@
     <div>
       <%= form.label :email, class: "label" %>
       <%= form.email_field :email, value: @user.email, class: "input", required: true, autofocus: true, autocomplete: "email" %>
-    </div>
-
-    <div>
-      <%= form.label :password, class: "label" %>
-      <%= form.password_field :password, class: "input", required: true, autocomplete: "new-password" %>
-      <p class="muted mt-1">12 characters minimum.</p>
-    </div>
-
-    <div>
-      <%= form.label :password_confirmation, class: "label" %>
-      <%= form.password_field :password_confirmation, class: "input", required: true, autocomplete: "new-password" %>
+      <p class="muted mt-1">We'll generate a temporary password for you to share. They can change it after logging in.</p>
     </div>
 
     <div>

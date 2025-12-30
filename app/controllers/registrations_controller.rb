@@ -7,10 +7,13 @@ class RegistrationsController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    temporary_password = SecureRandom.base58(16)
+    @user.password = temporary_password
+    @user.password_confirmation = temporary_password
 
     if @user.save
-      send_email_verification
-      redirect_to root_path, notice: "User account created successfully"
+      @temporary_password = temporary_password
+      render :created, status: :ok
     else
       render :new, status: :unprocessable_content
     end
@@ -33,10 +36,6 @@ class RegistrationsController < ApplicationController
     end
 
     def user_params
-      params.permit(:email, :password, :password_confirmation, :contracted_hours, :working_days_per_week)
-    end
-
-    def send_email_verification
-      UserMailer.with(user: @user).email_verification.deliver_later
+      params.permit(:email, :contracted_hours, :working_days_per_week)
     end
 end

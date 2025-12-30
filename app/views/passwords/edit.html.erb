@@ -1,7 +1,5 @@
-<div class="card max-w-lg">
-  <p class="card-title">Security</p>
+<div class="card mx-auto w-full max-w-lg">
   <h1 class="section-title">Change your password</h1>
-  <p class="muted">Choose a new password to keep your account secure.</p>
 
   <%= form_with(url: password_path, method: :patch, class: "mt-6 space-y-4") do |form| %>
     <% if @user.errors.any? %>
@@ -16,7 +14,7 @@
     <% end %>
 
     <div>
-      <%= form.label :password_challenge, class: "label" %>
+      <%= form.label :password_challenge, "Current password", class: "label" %>
       <%= form.password_field :password_challenge, class: "input", required: true, autofocus: true, autocomplete: "current-password" %>
     </div>
 
@@ -33,7 +31,7 @@
 
     <div class="flex flex-wrap items-center gap-3">
       <%= form.submit "Save changes", class: "btn" %>
-      <%= link_to "Back", root_path, class: "btn-ghost" %>
+      <%= link_to "Back", account_path, class: "btn-ghost" %>
     </div>
   <% end %>
 </div>

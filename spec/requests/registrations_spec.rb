@@ -56,14 +56,14 @@ RSpec.describe "Registrations", type: :request do
       expect do
         post sign_up_url, params: {
           email: "new.user@example.com",
-          password: "Secret1*3*5*",
-          password_confirmation: "Secret1*3*5*",
           contracted_hours: 37,
           working_days_per_week: 5
         }
       end.to change(User, :count).by(1)
 
-      expect(response).to redirect_to(root_url)
+      expect(response).to be_successful
+      expect(response.body).to include("Temporary password")
+      expect(response.body).to include("new.user@example.com")
     end
   end
 end

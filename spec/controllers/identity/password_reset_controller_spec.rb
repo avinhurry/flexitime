@@ -2,7 +2,7 @@ require "cgi"
 require "rails_helper"
 
 RSpec.describe Identity::PasswordResetsController, type: :request do
-  let(:user) { create(:user, verified: true) }
+  let(:user) { create(:user) }
 
   describe "GET /identity/password_reset/new" do
     it "should get new" do
@@ -29,17 +29,16 @@ RSpec.describe Identity::PasswordResetsController, type: :request do
 
   describe "POST /identity/password_reset" do
     context "with a valid email" do
-        it "should send a password reset email" do
-      expect do
-        perform_enqueued_jobs do
-          post identity_password_reset_url, params: { email: user.email }
-        end
-      end.to change { ActionMailer::Base.deliveries.size }.by(1)
+      it "should send a password reset email" do
+        expect do
+          perform_enqueued_jobs do
+            post identity_password_reset_url, params: { email: user.email }
+          end
+        end.to change { ActionMailer::Base.deliveries.size }.by(1)
 
-      expect(response).to redirect_to(sign_in_url)
+        expect(response).to redirect_to(sign_in_url)
+      end
     end
-  end
-
 
     context "with a non existent email" do
       it "should not send a password reset email" do
@@ -48,20 +47,7 @@ RSpec.describe Identity::PasswordResetsController, type: :request do
         end.not_to have_enqueued_mail
 
         expect(response).to redirect_to(new_identity_password_reset_url)
-        expect(flash[:alert]).to eq("You can't reset your password until you verify your email")
-      end
-    end
-
-    context "with an unverified email" do
-      it "should not send a password reset email" do
-        user.update!(verified: false)
-
-        expect do
-          post identity_password_reset_url, params: { email: user.email }
-        end.not_to have_enqueued_mail
-
-        expect(response).to redirect_to(new_identity_password_reset_url)
-        expect(flash[:alert]).to eq("You can't reset your password until you verify your email")
+        expect(flash[:alert]).to eq("We couldn't find that email address")
       end
     end
   end

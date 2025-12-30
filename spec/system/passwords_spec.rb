@@ -22,7 +22,7 @@ RSpec.feature "Passwords", type: :system do
   end
 
   def and_i_submit_a_new_password(password)
-    fill_in "Password challenge", with: AuthHelpers::DEFAULT_PASSWORD
+    fill_in "Current password", with: AuthHelpers::DEFAULT_PASSWORD
     fill_in "New password", with: password
     fill_in "Confirm new password", with: password
     click_on "Save changes"

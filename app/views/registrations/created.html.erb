@@ -1,0 +1,23 @@
+<div class="card mx-auto max-w-lg">
+  <p class="card-title">Admin</p>
+  <h1 class="section-title">User created</h1>
+  <p class="muted">Copy these details now. The temporary password will not be shown again.</p>
+
+  <div class="mt-6 space-y-3 rounded-2xl border border-black/10 bg-slate-50 px-4 py-3 text-sm">
+    <div>
+      <p class="text-xs uppercase tracking-wide text-slate-500">Email</p>
+      <p class="font-medium text-slate-900"><%= @user.email %></p>
+    </div>
+    <div>
+      <p class="text-xs uppercase tracking-wide text-slate-500">Temporary password</p>
+      <p class="font-medium text-slate-900"><%= @temporary_password %></p>
+    </div>
+  </div>
+
+  <p class="muted mt-4">Ask them to change it after logging in.</p>
+
+  <div class="mt-6 flex flex-wrap gap-3">
+    <%= link_to "Create another user", sign_up_path, class: "btn" %>
+    <%= link_to "Back to app", root_path, class: "btn-ghost" %>
+  </div>
+</div>

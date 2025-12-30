@@ -15,16 +15,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context "when the email changes" do
-    it "marks the user as unverified" do
-      user = described_class.create!(email: "user@example.com", password: password, verified: true)
-
-      user.update!(email: "new@example.com")
-
-      expect(user.verified).to be(false)
-    end
-  end
-
   context "when the password changes" do
     it "removes other sessions" do
       user = described_class.create!(email: "user@example.com", password: password)

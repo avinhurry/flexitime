@@ -12,7 +12,6 @@ erDiagram
     integer id
     string email
     string password_digest
-    boolean verified
     datetime created_at
     datetime updated_at
     integer contracted_hours

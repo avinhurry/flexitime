@@ -7,9 +7,11 @@ Rails.application.routes.draw do
   resource  :password, only: [ :edit, :update ]
   namespace :identity do
     resource :email,              only: [ :edit, :update ]
-    resource :email_verification, only: [ :show, :create ]
     resource :password_reset,     only: [ :new, :edit, :create, :update ]
   end
+  get "account", to: "home#index"
+  get "account/work-schedule", to: "work_schedules#edit", as: :edit_work_schedule
+  patch "account/work-schedule", to: "work_schedules#update", as: :work_schedule
   root "time_entries#index"
   resources :time_entries, only: [ :index, :new, :create, :edit, :update, :destroy ]
 

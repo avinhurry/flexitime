@@ -11,13 +11,4 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.to).to eq([ user.email ])
     end
   end
-
-  describe "#email_verification" do
-    it "sends the verification email" do
-      mail = described_class.with(user: user).email_verification
-
-      expect(mail.subject).to eq("Verify your email")
-      expect(mail.to).to eq([ user.email ])
-    end
-  end
 end
