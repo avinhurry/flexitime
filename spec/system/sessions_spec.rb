@@ -43,6 +43,7 @@ RSpec.feature "Sessions", type: :system do
   end
 
   def when_i_sign_out
+    visit account_path
     click_on "Log out"
   end
 
