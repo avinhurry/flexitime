@@ -14,8 +14,8 @@ class TimeEntriesController < ApplicationController
     required_hours_decimal = required_minutes / 60.0
     @required_hours = TimeEntry.format_decimal_hours_to_hours_minutes(required_hours_decimal)
     @hours_difference = total_hours_decimal - required_hours_decimal
-    @remaining_minutes = [required_minutes - @total_minutes, 0].max
-    @ahead_minutes = [@total_minutes - required_minutes, 0].max
+    @remaining_minutes = [ required_minutes - @total_minutes, 0 ].max
+    @ahead_minutes = [ @total_minutes - required_minutes, 0 ].max
   end
 
   def new
