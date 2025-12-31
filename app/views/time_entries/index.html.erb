@@ -1,10 +1,24 @@
 <% content_for :title, "Time Entries" %>
-<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="grid gap-4 justify-items-center text-center md:hidden">
   <div>
     <h1 class="text-3xl font-semibold text-slate-900">Time Entries</h1>
     <p class="muted">Week commencing <%= format_date(@work_week_start) %></p>
   </div>
-  <div class="flex items-center gap-3">
+  <div class="grid gap-3 justify-items-center">
+    <%= link_to "New Time Entry", new_time_entry_path, class: "btn" %>
+    <div class="flex items-center gap-3">
+      <%= link_to "Previous Week", time_entries_path(week_start: @week_start - 7.days), class: "btn-ghost" %>
+      <%= link_to "Next Week", time_entries_path(week_start: @week_start + 7.days), class: "btn-ghost" %>
+    </div>
+  </div>
+</div>
+
+<div class="hidden flex-wrap items-center justify-between gap-4 md:flex">
+  <div>
+    <h1 class="text-3xl font-semibold text-slate-900">Time Entries</h1>
+    <p class="muted">Week commencing <%= format_date(@work_week_start) %></p>
+  </div>
+  <div class="flex flex-wrap items-center gap-3">
     <%= link_to "New Time Entry", new_time_entry_path, class: "btn" %>
     <%= link_to "Previous Week", time_entries_path(week_start: @week_start - 7.days), class: "btn-ghost" %>
     <%= link_to "Next Week", time_entries_path(week_start: @week_start + 7.days), class: "btn-ghost" %>
@@ -75,43 +89,82 @@
 </div>
 
 <div class="mt-20">
-  <div class="mt-4 overflow-x-auto">
+  <div class="mt-4">
     <% if @time_entries.any? %>
-      <table class="table">
-        <thead>
-          <tr class="table-head">
-            <th class="pb-3 px-4">Clocked in</th>
-            <th class="pb-3 px-4">Clocked out</th>
-            <th class="pb-3 px-4">Lunch duration</th>
-            <th class="pb-3 px-4">Hours worked</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @time_entries.each do |entry| %>
-            <tr>
-              <td class="table-cell rounded-l-2xl bg-white"><%= format_datetime(entry.clock_in) %></td>
-              <td class="table-cell bg-white"><%= entry.clock_out ? format_datetime(entry.clock_out) : "Not clocked out yet" %></td>
-              <td class="table-cell bg-white">
+      <div class="space-y-4 md:hidden">
+        <% @time_entries.each do |entry| %>
+          <div class="card text-center">
+            <div class="grid gap-4 justify-items-center sm:grid-cols-2">
+              <div>
+                <p class="card-title">Clocked in</p>
+                <p class="text-slate-900"><%= format_datetime(entry.clock_in) %></p>
+              </div>
+              <div>
+                <p class="card-title">Clocked out</p>
+                <p class="text-slate-900"><%= entry.clock_out ? format_datetime(entry.clock_out) : "Not clocked out yet" %></p>
+              </div>
+              <div>
+                <p class="card-title">Lunch duration</p>
                 <% if entry.lunch_duration_in_minutes.to_i > 0 %>
-                  <%= entry.lunch_duration_in_hours_and_minutes %>
+                  <p class="text-slate-900"><%= entry.lunch_duration_in_hours_and_minutes %></p>
                 <% else %>
-                  <span class="text-slate-400">No lunch recorded</span>
+                  <p class="text-slate-400">No lunch recorded</p>
                 <% end %>
-              </td>
-              <td class="table-cell bg-white"><%= entry.hours_worked_in_hours_and_minutes %></td>
-              <td class="table-cell rounded-r-2xl bg-white text-right">
-                <div class="flex items-center justify-end gap-2">
-                  <%= link_to "Edit", edit_time_entry_path(entry), class: "btn-ghost" %>
-                  <%= button_to "Delete", time_entry_path(entry), method: :delete,
-                    class: "btn-danger",
-                    data: { confirm: "Are you sure?" },
-                    form: { class: "inline-block" } %>
-                </div>
-              </td>
+              </div>
+              <div>
+                <p class="card-title">Hours worked</p>
+                <p class="text-slate-900"><%= entry.hours_worked_in_hours_and_minutes %></p>
+              </div>
+            </div>
+            <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+              <%= link_to "Edit", edit_time_entry_path(entry), class: "btn-ghost" %>
+              <%= button_to "Delete", time_entry_path(entry), method: :delete,
+                class: "btn-danger",
+                data: { confirm: "Are you sure?" },
+                form: { class: "inline-block" } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="hidden overflow-x-auto md:flex">
+        <table class="table">
+          <thead>
+            <tr class="table-head">
+              <th class="pb-3 px-4">Clocked in</th>
+              <th class="pb-3 px-4">Clocked out</th>
+              <th class="pb-3 px-4">Lunch duration</th>
+              <th class="pb-3 px-4">Hours worked</th>
+              <th class="pb-3 px-4 text-right">Actions</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% @time_entries.each do |entry| %>
+              <tr>
+                <td class="table-cell rounded-l-2xl bg-white"><%= format_datetime(entry.clock_in) %></td>
+                <td class="table-cell bg-white"><%= entry.clock_out ? format_datetime(entry.clock_out) : "Not clocked out yet" %></td>
+                <td class="table-cell bg-white">
+                  <% if entry.lunch_duration_in_minutes.to_i > 0 %>
+                    <%= entry.lunch_duration_in_hours_and_minutes %>
+                  <% else %>
+                    <span class="text-slate-400">No lunch recorded</span>
+                  <% end %>
+                </td>
+                <td class="table-cell bg-white"><%= entry.hours_worked_in_hours_and_minutes %></td>
+                <td class="table-cell rounded-r-2xl bg-white text-right">
+                  <div class="flex flex-wrap items-center justify-end gap-2">
+                    <%= link_to "Edit", edit_time_entry_path(entry), class: "btn-ghost" %>
+                    <%= button_to "Delete", time_entry_path(entry), method: :delete,
+                      class: "btn-danger",
+                      data: { confirm: "Are you sure?" },
+                      form: { class: "inline-block" } %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     <% else %>
       <p class="muted">No entries yet for this week.</p>
     <% end %>
