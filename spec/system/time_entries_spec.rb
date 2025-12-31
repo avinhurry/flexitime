@@ -16,7 +16,7 @@ RSpec.feature "Time entries", type: :system do
   end
 
   def when_i_record_a_time_entry
-    click_on "New Time Entry"
+    click_on "New Time Entry", match: :first
 
     fill_in "Clock in", with: "2025-03-07T09:00"
     fill_in "Clock out", with: "2025-03-07T17:00"
