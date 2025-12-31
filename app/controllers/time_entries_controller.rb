@@ -3,16 +3,19 @@ class TimeEntriesController < ApplicationController
     @week_start = params[:week_start] ? Date.parse(params[:week_start]) : Date.today
     work_week_range = TimeEntry.work_week_range(@week_start)
     @work_week_start = work_week_range.begin
-    @work_week_end = work_week_range.end
     @time_entries = current_user.time_entries
       .where(clock_in: work_week_range)
       .order(clock_in: :asc)
     total_hours_decimal = TimeEntry.total_hours_for_week(@week_start, current_user)
     @total_hours = TimeEntry.format_decimal_hours_to_hours_minutes(total_hours_decimal)
+    @total_minutes = (total_hours_decimal * 60).round
     required_minutes = WeekEntry.required_minutes_for(current_user, @work_week_start)
+    @required_minutes = required_minutes
     required_hours_decimal = required_minutes / 60.0
     @required_hours = TimeEntry.format_decimal_hours_to_hours_minutes(required_hours_decimal)
     @hours_difference = total_hours_decimal - required_hours_decimal
+    @remaining_minutes = [required_minutes - @total_minutes, 0].max
+    @ahead_minutes = [@total_minutes - required_minutes, 0].max
   end
 
   def new

@@ -17,7 +17,14 @@
     <div class="mt-4 grid gap-6 text-center justify-items-center sm:grid-cols-3">
       <div>
         <p class="muted">Worked</p>
-        <p class="text-2xl font-semibold text-slate-900"><%= @total_hours %></p>
+        <p
+          class="text-2xl font-semibold text-slate-900"
+          data-controller="countup"
+          data-countup-start-value="0"
+          data-countup-end-value="<%= @total_minutes %>"
+        >
+          <%= @total_hours %>
+        </p>
       </div>
       <div>
         <p class="muted">Target</p>
@@ -33,15 +40,30 @@
         <% end %>
 
         <% if @hours_difference.positive? %>
-          <p class="summary-positive text-2xl font-semibold">
+          <p
+            class="summary-positive text-2xl font-semibold"
+            data-controller="countup"
+            data-countup-start-value="0"
+            data-countup-end-value="<%= @ahead_minutes %>"
+          >
             <%= TimeEntry.format_decimal_hours_to_hours_minutes(@hours_difference) %>
           </p>
         <% elsif @hours_difference < -1 %>
-          <p class="summary-negative text-2xl font-semibold">
+          <p
+            class="summary-negative text-2xl font-semibold"
+            data-controller="countup"
+            data-countup-start-value="<%= @required_minutes %>"
+            data-countup-end-value="<%= @remaining_minutes %>"
+          >
            <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
           </p>
         <% elsif @hours_difference.negative? %>
-          <p class="summary-neutral text-2xl font-semibold">
+          <p
+            class="summary-neutral text-2xl font-semibold"
+            data-controller="countup"
+            data-countup-start-value="<%= @required_minutes %>"
+            data-countup-end-value="<%= @remaining_minutes %>"
+          >
             <%= TimeEntry.format_decimal_hours_to_hours_minutes(-@hours_difference) %>
           </p>
         <% else %>
