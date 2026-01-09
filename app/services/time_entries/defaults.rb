@@ -26,7 +26,7 @@ module TimeEntries
     attr_reader :time_entry, :user
 
     def times_already_set?
-      time_entry.clock_in || time_entry.clock_out || time_entry.lunch_in || time_entry.lunch_out
+      time_entry.clock_in || time_entry.clock_out || time_entry.time_entry_breaks.any? { |break_entry| break_entry.break_in || break_entry.break_out }
     end
 
     def minutes_per_day

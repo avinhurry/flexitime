@@ -25,7 +25,7 @@ class TimeEntriesController < ApplicationController
 
   def create
     @time_entry = current_user.time_entries.build(time_entry_params)
-    TimeEntries::LunchTimes.apply(@time_entry)
+    TimeEntries::BreakTimes.apply(@time_entry)
 
     if @time_entry.save
       week_start = TimeEntry.work_week_range(@time_entry.clock_in).begin.to_date
@@ -43,7 +43,7 @@ class TimeEntriesController < ApplicationController
     @time_entry = current_user.time_entries.find(params[:id])
 
     @time_entry.assign_attributes(time_entry_params)
-    TimeEntries::LunchTimes.apply(@time_entry)
+    TimeEntries::BreakTimes.apply(@time_entry)
 
     if @time_entry.save
       week_start = TimeEntry.work_week_range(@time_entry.clock_in).begin.to_date
@@ -62,7 +62,11 @@ class TimeEntriesController < ApplicationController
   private
 
   def time_entry_params
-    params.require(:time_entry).permit(:clock_in, :clock_out, :lunch_in_time, :lunch_out_time)
+    params.require(:time_entry).permit(
+      :clock_in,
+      :clock_out,
+      time_entry_breaks_attributes: [ :id, :break_in_time, :break_out_time, :reason, :_destroy ]
+    )
   end
 
   def current_user

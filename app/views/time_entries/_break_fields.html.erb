@@ -1,0 +1,18 @@
+<div class="grid gap-3 md:grid-cols-6 items-end" data-breaks-row>
+  <div class="md:col-span-1">
+    <%= f.label :break_in_time, "Break start", class: "label" %>
+    <%= f.time_field :break_in_time, class: "input", step: 60 %>
+  </div>
+  <div class="md:col-span-1">
+    <%= f.label :break_out_time, "Break end", class: "label" %>
+    <%= f.time_field :break_out_time, class: "input", step: 60 %>
+  </div>
+  <div class="md:col-span-3">
+    <%= f.label :reason, "Reason (optional)", class: "label" %>
+    <%= f.text_field :reason, class: "input", placeholder: "Optional" %>
+  </div>
+  <div class="pb-1 md:col-span-1">
+    <%= f.hidden_field :_destroy, value: "0" %>
+    <button type="button" class="btn-ghost" data-action="breaks#remove">Remove</button>
+  </div>
+</div>

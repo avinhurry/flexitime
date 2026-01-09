@@ -1,23 +1,25 @@
 require "rails_helper"
 
 RSpec.describe TimeEntry, type: :model do
-  def create_entry(user, date, start_hour:, start_minute: 0, end_hour:, end_minute: 0, lunch: nil)
+  def create_entry(user, date, start_hour:, start_minute: 0, end_hour:, end_minute: 0, breaks: nil)
     clock_in = Time.zone.local(date.year, date.month, date.day, start_hour, start_minute)
     clock_out = Time.zone.local(date.year, date.month, date.day, end_hour, end_minute)
     attrs = { clock_in: clock_in, clock_out: clock_out }
 
-    if lunch
-      lunch_in = Time.zone.local(date.year, date.month, date.day, lunch[:start_hour], lunch.fetch(:start_minute, 0))
-      lunch_out = Time.zone.local(date.year, date.month, date.day, lunch[:end_hour], lunch.fetch(:end_minute, 0))
-      attrs.merge!(lunch_in: lunch_in, lunch_out: lunch_out)
+    entry = user.time_entries.create!(attrs)
+    Array(breaks).each do |break_data|
+      entry.time_entry_breaks.create!(
+        break_in: Time.zone.local(date.year, date.month, date.day, break_data[:start_hour], break_data.fetch(:start_minute, 0)),
+        break_out: Time.zone.local(date.year, date.month, date.day, break_data[:end_hour], break_data.fetch(:end_minute, 0)),
+        reason: break_data[:reason]
+      )
     end
-
-    user.time_entries.create!(attrs)
+    entry
   end
 
   describe "#minutes_worked" do
-    context "when lunch is recorded" do
-      it "subtracts lunch in minutes" do
+    context "when breaks are recorded" do
+      it "subtracts break minutes" do
         user = create(:user, email: "user@example.com")
         date = Date.new(2025, 3, 3)
 
@@ -26,7 +28,7 @@ RSpec.describe TimeEntry, type: :model do
           date,
           start_hour: 9,
           end_hour: 17,
-          lunch: { start_hour: 12, end_hour: 12, end_minute: 30 }
+          breaks: [ { start_hour: 12, end_hour: 12, end_minute: 30 } ]
         )
 
         expect(entry.minutes_worked).to eq(450)
@@ -41,8 +43,8 @@ RSpec.describe TimeEntry, type: :model do
       end
     end
 
-    context "when lunch is not recorded" do
-      it "does not subtract lunch minutes" do
+    context "when breaks are not recorded" do
+      it "does not subtract break minutes" do
         user = create(:user, email: "user@example.com")
         date = Date.new(2025, 3, 3)
 
@@ -53,47 +55,66 @@ RSpec.describe TimeEntry, type: :model do
     end
   end
 
-  describe "#lunch_duration_in_minutes" do
-    context "when lunch is missing" do
+  describe "#breaks_duration_in_minutes" do
+    context "when breaks are missing" do
       it "returns zero" do
         entry = described_class.new
-        expect(entry.lunch_duration_in_minutes).to eq(0)
+        expect(entry.breaks_duration_in_minutes).to eq(0)
       end
     end
 
-    context "when lunch has seconds" do
+    context "when a break has seconds" do
       it "rounds to the nearest minute" do
         user = create(:user, email: "user@example.com")
         date = Date.new(2025, 3, 3)
         clock_in = Time.zone.local(date.year, date.month, date.day, 9)
         clock_out = Time.zone.local(date.year, date.month, date.day, 17)
-        lunch_in = Time.zone.local(date.year, date.month, date.day, 12, 0, 30)
-        lunch_out = Time.zone.local(date.year, date.month, date.day, 12, 31, 0)
+        break_in = Time.zone.local(date.year, date.month, date.day, 12, 0, 30)
+        break_out = Time.zone.local(date.year, date.month, date.day, 12, 31, 0)
 
-        entry = user.time_entries.create!(
-          clock_in: clock_in,
-          clock_out: clock_out,
-          lunch_in: lunch_in,
-          lunch_out: lunch_out
-        )
+        entry = user.time_entries.create!(clock_in: clock_in, clock_out: clock_out)
+        entry.time_entry_breaks.create!(break_in: break_in, break_out: break_out)
 
-        expect(entry.lunch_duration_in_minutes).to eq(31)
+        expect(entry.breaks_duration_in_minutes).to eq(31)
       end
     end
   end
 
-  describe "#lunch_duration_in_hours_and_minutes" do
+  describe "#breaks_duration_in_hours_and_minutes" do
     it "formats hours and minutes" do
       user = create(:user, email: "user@example.com")
       date = Date.new(2025, 3, 3)
       entry = user.time_entries.create!(
         clock_in: Time.zone.local(date.year, date.month, date.day, 9),
-        clock_out: Time.zone.local(date.year, date.month, date.day, 17),
-        lunch_in: Time.zone.local(date.year, date.month, date.day, 12),
-        lunch_out: Time.zone.local(date.year, date.month, date.day, 12, 45)
+        clock_out: Time.zone.local(date.year, date.month, date.day, 17)
       )
 
-      expect(entry.lunch_duration_in_hours_and_minutes).to eq("0h 45m")
+      entry.time_entry_breaks.create!(
+        break_in: Time.zone.local(date.year, date.month, date.day, 12),
+        break_out: Time.zone.local(date.year, date.month, date.day, 12, 45)
+      )
+
+      expect(entry.breaks_duration_in_hours_and_minutes).to eq("0h 45m")
+    end
+  end
+
+  describe "#break_reasons" do
+    it "returns trimmed, non-blank reasons" do
+      user = create(:user, email: "user@example.com")
+      date = Date.new(2025, 3, 3)
+      entry = create_entry(
+        user,
+        date,
+        start_hour: 9,
+        end_hour: 17,
+        breaks: [
+          { start_hour: 12, end_hour: 12, end_minute: 30, reason: "  Lunch  " },
+          { start_hour: 14, end_hour: 14, end_minute: 15, reason: "" },
+          { start_hour: 15, end_hour: 15, end_minute: 10, reason: " Errand" }
+        ]
+      )
+
+      expect(entry.break_reasons).to eq([ "Lunch", "Errand" ])
     end
   end
 

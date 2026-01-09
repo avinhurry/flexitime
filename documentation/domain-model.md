@@ -18,14 +18,22 @@ erDiagram
     integer working_days_per_week
     boolean admin
   }
+  TimeEntryBreak {
+    integer id
+    integer time_entry_id
+    datetime break_in
+    datetime break_out
+    string reason
+    datetime created_at
+    datetime updated_at
+  }
+  TimeEntryBreak }o--|| TimeEntry : belongs_to
   TimeEntry {
     integer id
     datetime clock_in
     datetime clock_out
     datetime created_at
     datetime updated_at
-    datetime lunch_out
-    datetime lunch_in
     integer user_id
   }
   TimeEntry }o--|| User : belongs_to

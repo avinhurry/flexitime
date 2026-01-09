@@ -3,7 +3,7 @@
   <div class="flex items-center justify-between">
     <div>
       <h1 class="section-title">Update time entry</h1>
-      <p class="muted">Adjust times or add a lunch break.</p>
+      <p class="muted">Adjust times or add breaks.</p>
     </div>
   </div>
 
@@ -29,15 +29,30 @@
         <%= form.label :clock_out, class: "label" %>
         <%= form.datetime_field :clock_out, class: "input", step: 60 %>
       </div>
+    </div>
 
-      <div>
-        <%= form.label :lunch_in_time, "Lunch in (optional)", class: "label" %>
-        <%= form.time_field :lunch_in_time, class: "input", step: 60 %>
+    <div class="mt-6 space-y-4 border-t border-slate-200 pt-6" data-controller="breaks">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h2 class="section-title text-base">Breaks</h2>
       </div>
-
-      <div>
-        <%= form.label :lunch_out_time, "Lunch out (optional)", class: "label" %>
-        <%= form.time_field :lunch_out_time, class: "input", step: 60 %>
+      <div class="space-y-3" data-breaks-target="list">
+        <% if @time_entry.time_entry_breaks.any? %>
+          <%= form.fields_for :time_entry_breaks do |break_fields| %>
+            <%= render "break_fields", f: break_fields %>
+          <% end %>
+        <% else %>
+          <%= form.fields_for :time_entry_breaks, TimeEntryBreak.new do |break_fields| %>
+            <%= render "break_fields", f: break_fields %>
+          <% end %>
+        <% end %>
+      </div>
+      <template data-breaks-target="template">
+        <%= form.fields_for :time_entry_breaks, TimeEntryBreak.new, child_index: "NEW_RECORD" do |break_fields| %>
+          <%= render "break_fields", f: break_fields %>
+        <% end %>
+      </template>
+      <div class="flex justify-center">
+        <button type="button" class="btn-ghost font-semibold underline underline-offset-4" data-action="breaks#add">Add break</button>
       </div>
     </div>
 
