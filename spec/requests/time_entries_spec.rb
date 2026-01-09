@@ -88,6 +88,38 @@ RSpec.describe "Time entries", type: :request do
       end
     end
 
+    context "when viewing entries" do
+      it "renders the entry details" do
+        entry = user.time_entries.create!(
+          clock_in: Time.zone.local(2025, 3, 3, 9, 0),
+          clock_out: Time.zone.local(2025, 3, 3, 17, 0)
+        )
+        entry.time_entry_breaks.create!(
+          break_in: Time.zone.local(2025, 3, 3, 12, 0),
+          break_out: Time.zone.local(2025, 3, 3, 12, 30),
+          reason: "Lunch"
+        )
+
+        get time_entry_path(entry)
+
+        expect(response).to be_successful
+        expect(response.body).to include("Time entry")
+        expect(response.body).to include("Lunch")
+      end
+
+      it "renders a fallback when no breaks exist" do
+        entry = user.time_entries.create!(
+          clock_in: Time.zone.local(2025, 3, 3, 9, 0),
+          clock_out: Time.zone.local(2025, 3, 3, 17, 0)
+        )
+
+        get time_entry_path(entry)
+
+        expect(response).to be_successful
+        expect(response.body).to include("No breaks recorded for this entry.")
+      end
+    end
+
     context "when deleting entries" do
       it "removes the entry and redirects" do
         entry = user.time_entries.create!(

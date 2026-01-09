@@ -18,6 +18,10 @@ class TimeEntriesController < ApplicationController
     @ahead_minutes = [ @total_minutes - required_minutes, 0 ].max
   end
 
+  def show
+    @time_entry = current_user.time_entries.find(params[:id])
+  end
+
   def new
     @time_entry = current_user.time_entries.build
     TimeEntries::Defaults.apply(@time_entry, user: current_user)

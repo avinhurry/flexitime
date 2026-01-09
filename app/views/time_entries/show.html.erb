@@ -1,0 +1,80 @@
+<% content_for :title, "Time entry" %>
+<div class="card">
+  <div class="flex flex-col items-center gap-3 text-center">
+    <div>
+      <h1 class="section-title">Time entry</h1>
+      <p class="muted"><%= format_date(@time_entry.clock_in) %></p>
+    </div>
+    <div class="flex flex-wrap items-center justify-center gap-2">
+      <%= link_to "Edit", edit_time_entry_path(@time_entry), class: "btn" %>
+    </div>
+  </div>
+
+  <div class="mt-6 grid gap-4 text-center md:grid-cols-4 md:justify-items-center">
+    <div>
+      <p class="card-title">Clocked in</p>
+      <p class="text-slate-900"><%= format_datetime(@time_entry.clock_in) %></p>
+    </div>
+    <div>
+      <p class="card-title">Clocked out</p>
+      <p class="text-slate-900"><%= @time_entry.clock_out ? format_datetime(@time_entry.clock_out) : "Not clocked out yet" %></p>
+    </div>
+    <div>
+      <p class="card-title">Breaks</p>
+      <% if @time_entry.breaks_duration_in_minutes.to_i > 0 %>
+        <p class="text-slate-900">
+          <%= pluralize(@time_entry.time_entry_breaks.size, "break") %> · <%= @time_entry.breaks_duration_in_hours_and_minutes %>
+        </p>
+      <% else %>
+        <p class="text-slate-400">No breaks recorded</p>
+      <% end %>
+    </div>
+    <div>
+      <p class="card-title">Hours worked</p>
+      <p class="text-slate-900"><%= @time_entry.hours_worked_in_hours_and_minutes %></p>
+    </div>
+  </div>
+
+  <div class="mt-8 border-t border-slate-200 pt-6">
+    <% if @time_entry.time_entry_breaks.any? %>
+      <div class="flex items-center justify-between">
+        <h2 class="section-title text-base">Break details</h2>
+      </div>
+      <div class="mt-4 space-y-4">
+        <% @time_entry.time_entry_breaks.each do |break_entry| %>
+          <div class="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
+            <div class="grid gap-3 sm:grid-cols-3">
+              <div>
+                <p class="card-title">Start</p>
+                <p class="text-slate-900"><%= break_entry.break_in ? format_datetime(break_entry.break_in) : "Not set" %></p>
+              </div>
+              <div>
+                <p class="card-title">End</p>
+                <p class="text-slate-900"><%= break_entry.break_out ? format_datetime(break_entry.break_out) : "Not set" %></p>
+              </div>
+              <div>
+                <p class="card-title">Duration</p>
+                <% if break_entry.duration_in_minutes.positive? %>
+                  <p class="text-slate-900">
+                    <%= TimeEntry.format_decimal_hours_to_hours_minutes(break_entry.duration_in_minutes / 60.0) %>
+                  </p>
+                <% else %>
+                  <p class="text-slate-400">Not available</p>
+                <% end %>
+              </div>
+            </div>
+            <% if break_entry.reason.to_s.strip.present? %>
+              <p class="mt-2 text-sm text-slate-600">Reason: <%= break_entry.reason.to_s.strip %></p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-sm text-slate-400">No breaks recorded for this entry.</p>
+    <% end %>
+  </div>
+
+  <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+    <%= link_to "Back to time entries", time_entries_path, class: "btn-ghost" %>
+  </div>
+</div>
