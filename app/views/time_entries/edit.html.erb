@@ -34,7 +34,6 @@
     <div class="space-y-4" data-controller="breaks">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <h2 class="section-title text-base">Breaks</h2>
-        <button type="button" class="btn-ghost" data-action="breaks#add">Add break</button>
       </div>
       <div class="space-y-3" data-breaks-target="list">
         <% if @time_entry.time_entry_breaks.any? %>
@@ -52,6 +51,10 @@
           <%= render "break_fields", f: break_fields %>
         <% end %>
       </template>
+    </div>
+
+    <div class="flex justify-center">
+      <button type="button" class="btn-ghost font-semibold underline underline-offset-4" data-action="breaks#add">Add break</button>
     </div>
 
     <div class="flex flex-wrap items-center gap-3">
