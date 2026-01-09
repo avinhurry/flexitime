@@ -104,11 +104,11 @@
                 <p class="text-slate-900"><%= entry.clock_out ? format_datetime(entry.clock_out) : "Not clocked out yet" %></p>
               </div>
               <div>
-                <p class="card-title">Lunch duration</p>
-                <% if entry.lunch_duration_in_minutes.to_i > 0 %>
-                  <p class="text-slate-900"><%= entry.lunch_duration_in_hours_and_minutes %></p>
+                <p class="card-title">Breaks</p>
+                <% if entry.breaks_duration_in_minutes.to_i > 0 %>
+                  <p class="text-slate-900"><%= entry.breaks_duration_in_hours_and_minutes %></p>
                 <% else %>
-                  <p class="text-slate-400">No lunch recorded</p>
+                  <p class="text-slate-400">No breaks recorded</p>
                 <% end %>
               </div>
               <div>
@@ -133,7 +133,7 @@
             <tr class="table-head">
               <th class="pb-3 px-4">Clocked in</th>
               <th class="pb-3 px-4">Clocked out</th>
-              <th class="pb-3 px-4">Lunch duration</th>
+              <th class="pb-3 px-4">Breaks</th>
               <th class="pb-3 px-4">Hours worked</th>
               <th class="pb-3 px-4 text-right">Actions</th>
             </tr>
@@ -144,10 +144,10 @@
                 <td class="table-cell rounded-l-2xl bg-white"><%= format_datetime(entry.clock_in) %></td>
                 <td class="table-cell bg-white"><%= entry.clock_out ? format_datetime(entry.clock_out) : "Not clocked out yet" %></td>
                 <td class="table-cell bg-white">
-                  <% if entry.lunch_duration_in_minutes.to_i > 0 %>
-                    <%= entry.lunch_duration_in_hours_and_minutes %>
+                  <% if entry.breaks_duration_in_minutes.to_i > 0 %>
+                    <%= entry.breaks_duration_in_hours_and_minutes %>
                   <% else %>
-                    <span class="text-slate-400">No lunch recorded</span>
+                    <span class="text-slate-400">No breaks recorded</span>
                   <% end %>
                 </td>
                 <td class="table-cell bg-white"><%= entry.hours_worked_in_hours_and_minutes %></td>
