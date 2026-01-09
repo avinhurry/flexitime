@@ -3,10 +3,13 @@ class TimeEntry < ApplicationRecord
   WORK_WEEK_START = :monday
 
   belongs_to :user
+  has_many :time_entry_breaks, dependent: :destroy
+
+  accepts_nested_attributes_for :time_entry_breaks,
+    allow_destroy: true,
+    reject_if: ->(attrs) { attrs.values_at("break_in_time", "break_out_time", "reason").all?(&:blank?) }
 
   validates :clock_in, :clock_out, presence: true
-
-  attr_accessor :lunch_in_time, :lunch_out_time
 
   after_save :recalculate_week_entries
   after_destroy :recalculate_week_entries
@@ -21,39 +24,19 @@ class TimeEntry < ApplicationRecord
     return 0 unless clock_in && clock_out
 
     total_minutes = ((clock_out - clock_in) / 1.minute).round
-    total_minutes - lunch_duration_in_minutes
+    total_minutes - breaks_duration_in_minutes
   end
 
   def hours_worked
     minutes_worked / 60.0
   end
 
-  def lunch_duration_in_minutes
-    return 0 unless lunch_out && lunch_in
-
-    ((lunch_out - lunch_in) / 1.minute).round
+  def breaks_duration_in_minutes
+    time_entry_breaks.sum(&:duration_in_minutes)
   end
 
-  def lunch_in_time
-    return @lunch_in_time if instance_variable_defined?(:@lunch_in_time)
-
-    lunch_in&.strftime("%H:%M")
-  end
-
-  def lunch_out_time
-    return @lunch_out_time if instance_variable_defined?(:@lunch_out_time)
-
-    lunch_out&.strftime("%H:%M")
-  end
-
-  def lunch_duration
-    lunch_duration_in_minutes / 60.0
-  end
-
-  def lunch_duration_in_hours_and_minutes
-    return "0h 0m" unless lunch_out && lunch_in
-
-    duration_in_minutes = lunch_duration_in_minutes
+  def breaks_duration_in_hours_and_minutes
+    duration_in_minutes = breaks_duration_in_minutes
     hours = (duration_in_minutes / 60).floor
     minutes = (duration_in_minutes % 60).round
 
