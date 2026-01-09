@@ -10,7 +10,8 @@ RSpec.describe TimeEntry, type: :model do
     Array(breaks).each do |break_data|
       entry.time_entry_breaks.create!(
         break_in: Time.zone.local(date.year, date.month, date.day, break_data[:start_hour], break_data.fetch(:start_minute, 0)),
-        break_out: Time.zone.local(date.year, date.month, date.day, break_data[:end_hour], break_data.fetch(:end_minute, 0))
+        break_out: Time.zone.local(date.year, date.month, date.day, break_data[:end_hour], break_data.fetch(:end_minute, 0)),
+        reason: break_data[:reason]
       )
     end
     entry
@@ -94,6 +95,26 @@ RSpec.describe TimeEntry, type: :model do
       )
 
       expect(entry.breaks_duration_in_hours_and_minutes).to eq("0h 45m")
+    end
+  end
+
+  describe "#break_reasons" do
+    it "returns trimmed, non-blank reasons" do
+      user = create(:user, email: "user@example.com")
+      date = Date.new(2025, 3, 3)
+      entry = create_entry(
+        user,
+        date,
+        start_hour: 9,
+        end_hour: 17,
+        breaks: [
+          { start_hour: 12, end_hour: 12, end_minute: 30, reason: "  Lunch  " },
+          { start_hour: 14, end_hour: 14, end_minute: 15, reason: "" },
+          { start_hour: 15, end_hour: 15, end_minute: 10, reason: " Errand" }
+        ]
+      )
+
+      expect(entry.break_reasons).to eq([ "Lunch", "Errand" ])
     end
   end
 

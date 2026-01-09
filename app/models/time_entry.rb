@@ -48,6 +48,10 @@ class TimeEntry < ApplicationRecord
     "#{hours}h #{minutes}m"
   end
 
+  def break_reasons
+    time_entry_breaks.filter_map { |break_entry| break_entry.reason.to_s.strip.presence }
+  end
+
   def self.total_hours_for_week(start_date, user)
     range = work_week_range(start_date)
     user.time_entries.where(clock_in: range).sum(&:hours_worked).round(2)

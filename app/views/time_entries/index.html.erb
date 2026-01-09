@@ -106,7 +106,23 @@
               <div>
                 <p class="card-title">Breaks</p>
                 <% if entry.breaks_duration_in_minutes.to_i > 0 %>
-                  <p class="text-slate-900"><%= entry.breaks_duration_in_hours_and_minutes %></p>
+                  <p class="text-slate-900">
+                    <%= pluralize(entry.time_entry_breaks.size, "break") %> · <%= entry.breaks_duration_in_hours_and_minutes %>
+                  </p>
+                  <% break_reasons = entry.break_reasons %>
+                  <% if break_reasons.any? %>
+                    <details class="text-xs text-slate-400 text-center">
+                      <summary class="cursor-pointer">Show reasons</summary>
+                      <ul class="mt-2 space-y-1">
+                        <% break_reasons.each do |reason| %>
+                          <li class="flex items-start justify-center gap-2 text-center">
+                            <span aria-hidden="true">•</span>
+                            <span><%= reason %></span>
+                          </li>
+                        <% end %>
+                      </ul>
+                    </details>
+                  <% end %>
                 <% else %>
                   <p class="text-slate-400">No breaks recorded</p>
                 <% end %>
@@ -145,7 +161,20 @@
                 <td class="table-cell bg-white"><%= entry.clock_out ? format_datetime(entry.clock_out) : "Not clocked out yet" %></td>
                 <td class="table-cell bg-white">
                   <% if entry.breaks_duration_in_minutes.to_i > 0 %>
-                    <%= entry.breaks_duration_in_hours_and_minutes %>
+                    <div class="text-slate-900">
+                      <%= pluralize(entry.time_entry_breaks.size, "break") %> · <%= entry.breaks_duration_in_hours_and_minutes %>
+                    </div>
+                    <% break_reasons = entry.break_reasons %>
+                    <% if break_reasons.any? %>
+                      <details class="text-xs text-slate-400">
+                        <summary class="cursor-pointer">Show reasons</summary>
+                        <ul class="mt-2 list-disc space-y-1 pl-4">
+                          <% break_reasons.each do |reason| %>
+                            <li><%= reason %></li>
+                          <% end %>
+                        </ul>
+                      </details>
+                    <% end %>
                   <% else %>
                     <span class="text-slate-400">No breaks recorded</span>
                   <% end %>
