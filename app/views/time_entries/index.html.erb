@@ -137,7 +137,7 @@
               <%= link_to "Edit", edit_time_entry_path(entry), class: "btn-ghost" %>
               <%= button_to "Delete", time_entry_path(entry), method: :delete,
                 class: "btn-danger",
-                data: { confirm: "Are you sure?" },
+                data: { turbo_confirm: "Delete this time entry? This cannot be undone." },
                 form: { class: "inline-block" } %>
             </div>
           </div>
@@ -187,7 +187,7 @@
                     <%= link_to "Edit", edit_time_entry_path(entry), class: "btn-ghost" %>
                     <%= button_to "Delete", time_entry_path(entry), method: :delete,
                       class: "btn-danger",
-                      data: { confirm: "Are you sure?" },
+                      data: { turbo_confirm: "Delete this time entry? This cannot be undone." },
                       form: { class: "inline-block" } %>
                   </div>
                 </td>
