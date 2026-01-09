@@ -34,8 +34,6 @@ erDiagram
     datetime clock_out
     datetime created_at
     datetime updated_at
-    datetime lunch_out
-    datetime lunch_in
     integer user_id
   }
   TimeEntry }o--|| User : belongs_to

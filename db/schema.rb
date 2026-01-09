@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_09_113719) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_09_122143) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,8 +27,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_09_113719) do
     t.datetime "clock_in"
     t.datetime "clock_out"
     t.datetime "created_at", null: false
-    t.datetime "lunch_in"
-    t.datetime "lunch_out"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_time_entries_on_user_id"
