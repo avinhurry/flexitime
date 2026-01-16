@@ -72,6 +72,7 @@ bundle exec rspec
 
 ## Documentation
 - Domain model: [documentation/domain-model.md](documentation/domain-model.md)
+- Roadmap: [documentation/ROADMAP.md](documentation/ROADMAP.md)
 
 ## Notes
 - Weeks start on Monday (Mon-Sun).
