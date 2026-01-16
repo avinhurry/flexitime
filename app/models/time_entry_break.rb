@@ -3,7 +3,7 @@ class TimeEntryBreak < ApplicationRecord
 
   attr_accessor :break_in_time, :break_out_time
 
-  validate :break_times_complete
+  validate :break_end_requires_start
 
   def duration_in_minutes
     return 0 unless break_in && break_out
@@ -25,10 +25,10 @@ class TimeEntryBreak < ApplicationRecord
 
   private
 
-  def break_times_complete
-    return if break_in.blank? && break_out.blank?
-    return if break_in.present? && break_out.present?
+  def break_end_requires_start
+    return if break_out.blank?
+    return if break_in.present?
 
-    errors.add(:base, "Break start and end must both be set")
+    errors.add(:base, "Break end time can't be set without a start time")
   end
 end

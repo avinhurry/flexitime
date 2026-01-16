@@ -52,6 +52,14 @@ class TimeEntry < ApplicationRecord
     time_entry_breaks.filter_map { |break_entry| break_entry.reason.to_s.strip.presence }
   end
 
+  def current_break
+    time_entry_breaks.where(break_out: nil).order(break_in: :desc).first
+  end
+
+  def break_in_progress?
+    current_break.present?
+  end
+
   def self.total_hours_for_week(start_date, user)
     range = work_week_range(start_date)
     user.time_entries.where(clock_in: range).sum(&:hours_worked).round(2)

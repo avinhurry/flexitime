@@ -120,6 +120,60 @@ RSpec.describe "Time entries", type: :request do
       end
     end
 
+    context "when managing breaks" do
+      it "starts a break" do
+        entry = user.time_entries.create!(
+          clock_in: Time.zone.local(2025, 3, 3, 9, 0),
+          clock_out: Time.zone.local(2025, 3, 3, 17, 0)
+        )
+
+        post start_break_time_entry_path(entry)
+
+        expect(response).to redirect_to(time_entry_path(entry))
+        expect(entry.reload.break_in_progress?).to be(true)
+      end
+
+      it "ends a break" do
+        entry = user.time_entries.create!(
+          clock_in: Time.zone.local(2025, 3, 3, 9, 0),
+          clock_out: Time.zone.local(2025, 3, 3, 17, 0)
+        )
+        entry.time_entry_breaks.create!(break_in: Time.zone.local(2025, 3, 3, 12, 0))
+
+        patch end_break_time_entry_path(entry)
+
+        expect(response).to redirect_to(time_entry_path(entry))
+        expect(entry.reload.break_in_progress?).to be(false)
+      end
+
+      it "shows an alert when starting a break twice" do
+        entry = user.time_entries.create!(
+          clock_in: Time.zone.local(2025, 3, 3, 9, 0),
+          clock_out: Time.zone.local(2025, 3, 3, 17, 0)
+        )
+        entry.time_entry_breaks.create!(break_in: Time.zone.local(2025, 3, 3, 12, 0))
+
+        post start_break_time_entry_path(entry)
+
+        expect(response).to redirect_to(edit_time_entry_path(entry))
+        follow_redirect!
+        expect(CGI.unescapeHTML(response.body)).to include("A break is already in progress.")
+      end
+
+      it "shows an alert when ending without a break" do
+        entry = user.time_entries.create!(
+          clock_in: Time.zone.local(2025, 3, 3, 9, 0),
+          clock_out: Time.zone.local(2025, 3, 3, 17, 0)
+        )
+
+        patch end_break_time_entry_path(entry)
+
+        expect(response).to redirect_to(edit_time_entry_path(entry))
+        follow_redirect!
+        expect(CGI.unescapeHTML(response.body)).to include("No break in progress.")
+      end
+    end
+
     context "when deleting entries" do
       it "removes the entry and redirects" do
         entry = user.time_entries.create!(
