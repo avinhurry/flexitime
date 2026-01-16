@@ -65,6 +65,19 @@
     @apply inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600;
   }
 
+  .break-timer {
+    @apply inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-600;
+  }
+
+  .pulse-dot {
+    @apply inline-block h-2.5 w-2.5 rounded-full bg-brand;
+    animation: pulse-dot 1.4s ease-in-out infinite;
+  }
+
+  .pulse-icon {
+    animation: pulse-dot 1.4s ease-in-out infinite;
+  }
+
   .table {
     @apply w-full border-separate border-spacing-y-2 text-sm;
   }
@@ -91,5 +104,21 @@
 
   .summary-negative {
     @apply text-brand;
+  }
+
+  .break-pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.6;
   }
 }

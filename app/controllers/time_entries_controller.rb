@@ -22,6 +22,28 @@ class TimeEntriesController < ApplicationController
     @time_entry = current_user.time_entries.find(params[:id])
   end
 
+  def start_break
+    @time_entry = current_user.time_entries.find(params[:id])
+    result = TimeEntries::Breaks.start(@time_entry)
+
+    if result.ok
+      redirect_to edit_time_entry_path(@time_entry)
+    else
+      redirect_to edit_time_entry_path(@time_entry), alert: result.message
+    end
+  end
+
+  def end_break
+    @time_entry = current_user.time_entries.find(params[:id])
+    result = TimeEntries::Breaks.end(@time_entry)
+
+    if result.ok
+      redirect_to edit_time_entry_path(@time_entry)
+    else
+      redirect_to edit_time_entry_path(@time_entry), alert: result.message
+    end
+  end
+
   def new
     @time_entry = current_user.time_entries.build
     TimeEntries::Defaults.apply(@time_entry, user: current_user)

@@ -13,7 +13,12 @@ Rails.application.routes.draw do
   get "account/work-schedule", to: "work_schedules#edit", as: :edit_work_schedule
   patch "account/work-schedule", to: "work_schedules#update", as: :work_schedule
   root "time_entries#index"
-  resources :time_entries, only: [ :index, :show, :new, :create, :edit, :update, :destroy ], path: "time-entries"
+  resources :time_entries, only: [ :index, :show, :new, :create, :edit, :update, :destroy ], path: "time-entries" do
+    member do
+      post :start_break
+      patch :end_break
+    end
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
