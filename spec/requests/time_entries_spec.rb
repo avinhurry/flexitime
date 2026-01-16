@@ -129,7 +129,7 @@ RSpec.describe "Time entries", type: :request do
 
         post start_break_time_entry_path(entry)
 
-        expect(response).to redirect_to(time_entry_path(entry))
+        expect(response).to redirect_to(edit_time_entry_path(entry))
         expect(entry.reload.break_in_progress?).to be(true)
       end
 
@@ -142,7 +142,7 @@ RSpec.describe "Time entries", type: :request do
 
         patch end_break_time_entry_path(entry)
 
-        expect(response).to redirect_to(time_entry_path(entry))
+        expect(response).to redirect_to(edit_time_entry_path(entry))
         expect(entry.reload.break_in_progress?).to be(false)
       end
 

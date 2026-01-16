@@ -27,7 +27,7 @@ class TimeEntriesController < ApplicationController
     result = TimeEntries::Breaks.start(@time_entry)
 
     if result.ok
-      redirect_to edit_time_entry_path(@time_entry), notice: result.message
+      redirect_to edit_time_entry_path(@time_entry)
     else
       redirect_to edit_time_entry_path(@time_entry), alert: result.message
     end
@@ -38,7 +38,7 @@ class TimeEntriesController < ApplicationController
     result = TimeEntries::Breaks.end(@time_entry)
 
     if result.ok
-      redirect_to edit_time_entry_path(@time_entry), notice: result.message
+      redirect_to edit_time_entry_path(@time_entry)
     else
       redirect_to edit_time_entry_path(@time_entry), alert: result.message
     end

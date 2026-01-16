@@ -7,14 +7,6 @@
     </div>
   </div>
 
-  <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-    <% if @time_entry.break_in_progress? %>
-      <%= button_to "End break", end_break_time_entry_path(@time_entry), method: :patch, class: "btn" %>
-    <% else %>
-      <%= button_to "Start break", start_break_time_entry_path(@time_entry), method: :post, class: "btn" %>
-    <% end %>
-  </div>
-
   <%= form_with model: @time_entry, local: true, class: "mt-6 space-y-5" do |form| %>
     <% if @time_entry.errors.any? %>
       <div class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
@@ -42,6 +34,37 @@
     <div class="mt-6 space-y-4 border-t border-slate-200 pt-6" data-controller="breaks">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <h2 class="section-title text-base">Breaks</h2>
+      </div>
+      <div class="flex flex-wrap items-center justify-start gap-3">
+        <% if @time_entry.break_in_progress? %>
+          <%= link_to end_break_time_entry_path(@time_entry),
+            class: "break-pill",
+            data: { turbo_method: :patch } do %>
+            <span
+              class="inline-flex items-center gap-2"
+              data-controller="break-timer"
+              data-break-timer-start-value="<%= @time_entry.current_break&.break_in&.iso8601 %>"
+            >
+              <svg class="pulse-icon h-4 w-4 text-brand" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <rect x="3" y="3" width="10" height="10" rx="2" fill="currentColor"></rect>
+              </svg>
+              <span>In progress</span>
+              <span class="tabular-nums text-slate-900" data-break-timer-target="elapsed">00:00</span>
+            </span>
+          <% end %>
+        <% else %>
+          <%= link_to start_break_time_entry_path(@time_entry),
+            class: "break-pill",
+            data: { turbo_method: :post } do %>
+            <span class="inline-flex items-center gap-2">
+              <svg class="h-4 w-4 text-brand" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M4 3.5v9l8-4.5-8-4.5z" fill="currentColor"></path>
+              </svg>
+              <span>Start break timer</span>
+              <span class="tabular-nums text-slate-900">00:00</span>
+            </span>
+          <% end %>
+        <% end %>
       </div>
       <div class="space-y-3" data-breaks-target="list">
         <% if @time_entry.time_entry_breaks.any? %>

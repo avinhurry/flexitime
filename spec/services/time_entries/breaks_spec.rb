@@ -11,7 +11,7 @@ RSpec.describe TimeEntries::Breaks do
       result = described_class.start(entry)
 
       expect(result.ok).to be(true)
-      expect(result.message).to eq("Break started.")
+      expect(result.message).to be_nil
       expect(entry.reload.break_in_progress?).to be(true)
     end
 
@@ -40,7 +40,7 @@ RSpec.describe TimeEntries::Breaks do
       result = described_class.end(entry)
 
       expect(result.ok).to be(true)
-      expect(result.message).to eq("Break ended.")
+      expect(result.message).to be_nil
       expect(entry.reload.break_in_progress?).to be(false)
     end
 

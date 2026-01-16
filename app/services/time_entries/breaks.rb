@@ -8,7 +8,7 @@ module TimeEntries
       end
 
       time_entry.time_entry_breaks.create!(break_in: Time.zone.now)
-      Result.new(ok: true, message: "Break started.")
+      Result.new(ok: true, message: nil)
     end
 
     def self.end(time_entry)
@@ -16,7 +16,7 @@ module TimeEntries
       return Result.new(ok: false, message: "No break in progress.") unless break_entry
 
       break_entry.update!(break_out: Time.zone.now)
-      Result.new(ok: true, message: "Break ended.")
+      Result.new(ok: true, message: nil)
     end
   end
 end
