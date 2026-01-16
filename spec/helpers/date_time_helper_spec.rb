@@ -33,4 +33,41 @@ RSpec.describe DateTimeHelper, type: :helper do
       expect(helper.format_datetime(time)).to eq("29 Dec 2025, 17:39")
     end
   end
+
+  describe "#breaks_duration_label" do
+    it "returns a fallback when no breaks exist" do
+      entry = create(:user, email: "user@example.com").time_entries.create!(
+        clock_in: Time.zone.local(2025, 12, 29, 9, 0),
+        clock_out: Time.zone.local(2025, 12, 29, 17, 0)
+      )
+
+      expect(helper.breaks_duration_label(entry)).to eq("No breaks recorded")
+    end
+
+    it "returns <1m for very short breaks" do
+      entry = create(:user, email: "user@example.com").time_entries.create!(
+        clock_in: Time.zone.local(2025, 12, 29, 9, 0),
+        clock_out: Time.zone.local(2025, 12, 29, 17, 0)
+      )
+      entry.time_entry_breaks.create!(
+        break_in: Time.zone.local(2025, 12, 29, 12, 0, 30),
+        break_out: Time.zone.local(2025, 12, 29, 12, 0, 50)
+      )
+
+      expect(helper.breaks_duration_label(entry)).to eq("<1m")
+    end
+
+    it "returns the formatted duration for longer breaks" do
+      entry = create(:user, email: "user@example.com").time_entries.create!(
+        clock_in: Time.zone.local(2025, 12, 29, 9, 0),
+        clock_out: Time.zone.local(2025, 12, 29, 17, 0)
+      )
+      entry.time_entry_breaks.create!(
+        break_in: Time.zone.local(2025, 12, 29, 12, 0),
+        break_out: Time.zone.local(2025, 12, 29, 12, 45)
+      )
+
+      expect(helper.breaks_duration_label(entry)).to eq("0h 45m")
+    end
+  end
 end

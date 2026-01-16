@@ -105,9 +105,9 @@
               </div>
               <div>
                 <p class="card-title">Breaks</p>
-                <% if entry.breaks_duration_in_minutes.to_i > 0 %>
+                <% if entry.time_entry_breaks.any? %>
                   <p class="text-slate-900">
-                    <%= pluralize(entry.time_entry_breaks.size, "break") %> · <%= entry.breaks_duration_in_hours_and_minutes %>
+                    <%= pluralize(entry.time_entry_breaks.size, "break") %> · <%= breaks_duration_label(entry) %>
                   </p>
                   <% break_reasons = entry.break_reasons %>
                   <% if break_reasons.any? %>
@@ -161,9 +161,9 @@
                 <td class="table-cell rounded-l-2xl bg-white"><%= format_datetime(entry.clock_in) %></td>
                 <td class="table-cell bg-white"><%= entry.clock_out ? format_datetime(entry.clock_out) : "Not clocked out yet" %></td>
                 <td class="table-cell bg-white">
-                  <% if entry.breaks_duration_in_minutes.to_i > 0 %>
+                  <% if entry.time_entry_breaks.any? %>
                     <div class="text-slate-900">
-                      <%= pluralize(entry.time_entry_breaks.size, "break") %> · <%= entry.breaks_duration_in_hours_and_minutes %>
+                      <%= pluralize(entry.time_entry_breaks.size, "break") %> · <%= breaks_duration_label(entry) %>
                     </div>
                     <% break_reasons = entry.break_reasons %>
                     <% if break_reasons.any? %>

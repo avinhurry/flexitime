@@ -21,9 +21,9 @@
     </div>
     <div>
       <p class="card-title">Breaks</p>
-      <% if @time_entry.breaks_duration_in_minutes.to_i > 0 %>
+      <% if @time_entry.time_entry_breaks.any? %>
         <p class="text-slate-900">
-          <%= pluralize(@time_entry.time_entry_breaks.size, "break") %> · <%= @time_entry.breaks_duration_in_hours_and_minutes %>
+          <%= pluralize(@time_entry.time_entry_breaks.size, "break") %> · <%= breaks_duration_label(@time_entry) %>
         </p>
       <% else %>
         <p class="text-slate-400">No breaks recorded</p>
