@@ -71,7 +71,7 @@ group :test do
   gem "selenium-webdriver"
 
   # Test framework
-  gem "rspec-rails", "~> 8.0.2"
+  gem "rspec-rails", "~> 8.0.3"
 
   # For fixtures (to define test data)
   gem "factory_bot_rails"
