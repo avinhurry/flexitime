@@ -48,7 +48,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # Automatic Ruby code style checking tool
-  gem "rubocop", "~> 1.84"
+  gem "rubocop", "~> 1.85"
 
   # Docker integration for Rails apps
   gem "dockerfile-rails", ">= 1.6"
