@@ -49,6 +49,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_09_122143) do
     t.string "email", null: false
     t.string "password_digest", null: false
     t.datetime "updated_at", null: false
+    t.boolean "verified", default: false, null: false
     t.integer "working_days_per_week", default: 5, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end

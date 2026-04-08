@@ -14,9 +14,13 @@ class TimeEntry < ApplicationRecord
   after_save :recalculate_week_entries
   after_destroy :recalculate_week_entries
 
+  def self.work_week_start(date)
+    date.in_time_zone.beginning_of_week(WORK_WEEK_START).beginning_of_day
+  end
+
   def self.work_week_range(date)
-    week_start = date.beginning_of_week(WORK_WEEK_START)
-    week_end = week_start + WORK_WEEK_DAYS.days
+    week_start = work_week_start(date)
+    week_end = week_start.advance(days: WORK_WEEK_DAYS)
     week_start...week_end
   end
 
@@ -86,10 +90,10 @@ class TimeEntry < ApplicationRecord
   def recalculate_week_entries
     return unless user && clock_in
 
-    week_starts = [ self.class.work_week_range(clock_in).begin ]
+    week_starts = [ self.class.work_week_start(clock_in) ]
     if saved_change_to_clock_in?
       previous_clock_in = clock_in_before_last_save
-      week_starts << self.class.work_week_range(previous_clock_in).begin if previous_clock_in
+      week_starts << self.class.work_week_start(previous_clock_in) if previous_clock_in
     end
 
     week_start = week_starts.min
