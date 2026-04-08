@@ -44,6 +44,27 @@ RSpec.describe WeekEntry, type: :model do
     end
   end
 
+  context "across the daylight saving boundary" do
+    it "returns the current week's stored target after creating a post-DST entry" do
+      user = create(:user, email: "dst@example.com")
+      previous_week_start = Date.new(2026, 3, 16)
+
+      4.times do |i|
+        create_shift(user, previous_week_start + i.days, 10)
+      end
+
+      current_week_start = Date.new(2026, 4, 6)
+      required_before = described_class.required_minutes_for(user, current_week_start)
+
+      create_shift(user, current_week_start, 8)
+
+      current_entry = user.week_entries.find_by(beginning_of_week: TimeEntry.work_week_start(current_week_start))
+
+      expect(current_entry.required_minutes).to eq(required_before)
+      expect(described_class.required_minutes_for(user, current_week_start)).to eq(required_before)
+    end
+  end
+
   context "when a week entry already exists" do
     it "returns the stored required minutes" do
       user = create(:user, email: "user@example.com")

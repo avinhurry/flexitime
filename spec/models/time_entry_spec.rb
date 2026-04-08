@@ -165,8 +165,16 @@ RSpec.describe TimeEntry, type: :model do
       date = Date.new(2025, 3, 5)
       range = described_class.work_week_range(date)
 
-      expect(range.begin).to eq(date.beginning_of_week(:monday))
-      expect(range.end).to eq(range.begin + 7.days)
+      expect(range.begin).to eq(Time.zone.local(2025, 3, 3, 0, 0))
+      expect(range.end).to eq(Time.zone.local(2025, 3, 10, 0, 0))
+    end
+
+    it "keeps the week boundary at local midnight across daylight saving time" do
+      date = Time.zone.local(2026, 3, 26, 12, 0)
+      range = described_class.work_week_range(date)
+
+      expect(range.begin).to eq(Time.zone.local(2026, 3, 23, 0, 0))
+      expect(range.end).to eq(Time.zone.local(2026, 3, 30, 0, 0))
     end
   end
 end

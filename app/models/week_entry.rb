@@ -5,10 +5,11 @@ class WeekEntry < ApplicationRecord
   validates :offset_in_minutes, numericality: { only_integer: true }, allow_nil: true
   validates :required_minutes, numericality: { only_integer: true }
 
+  before_validation :normalize_beginning_of_week
   before_create :set_required_minutes
 
   def self.required_minutes_for(user, week_start)
-    normalized_week_start = week_start.beginning_of_week(:monday)
+    normalized_week_start = normalize_week_start(week_start)
     existing = user.week_entries.find_by(beginning_of_week: normalized_week_start)
     return existing.required_minutes if existing
 
@@ -18,7 +19,7 @@ class WeekEntry < ApplicationRecord
   end
 
   def self.recalculate_from!(user, week_start)
-    normalized_week_start = week_start.beginning_of_week(:monday)
+    normalized_week_start = normalize_week_start(week_start)
     contracted_minutes = user.contracted_hours.to_i * 60
 
     current_range = TimeEntry.work_week_range(normalized_week_start)
@@ -53,7 +54,17 @@ class WeekEntry < ApplicationRecord
     contracted_minutes - previous_entry&.offset_in_minutes.to_i
   end
 
+  def self.normalize_week_start(week_start)
+    TimeEntry.work_week_start(week_start)
+  end
+
   private
+
+  def normalize_beginning_of_week
+    return if beginning_of_week.blank?
+
+    self.beginning_of_week = self.class.normalize_week_start(beginning_of_week)
+  end
 
   def set_required_minutes
     previous_entry = user.week_entries.where("beginning_of_week < ?", beginning_of_week)
