@@ -21,33 +21,37 @@
     </div>
   </div>
 
-  <div class="grid gap-5 md:grid-cols-2">
-    <div>
-      <%= tag.div data: day_credit_amount_controller_data(day_credit) do %>
-        <%= label_tag :amount_preset, "Amount", class: "label" %>
-        <%= select_tag :amount_preset,
-          options_for_select(day_credit_amount_options(day_credit), selected_day_credit_amount(day_credit)),
-          class: "select mt-2",
-          data: day_credit_amount_select_data %>
+  <div class="mt-6 space-y-4 border-t border-slate-200 pt-6">
+    <h2 class="section-title text-base">Credit</h2>
 
-        <%= tag.div data: { day_credit_amount_target: "customFields" }, class: "mt-4" do %>
-          <div class="flex flex-wrap items-center gap-3">
-            <div class="flex items-center gap-2">
-              <%= form.number_field :credited_hours_part, min: 0, class: "input w-24 text-center", data: day_credit_amount_input_data("hours") %>
-              <span class="text-sm font-medium text-slate-600">h</span>
+    <div class="grid gap-5 md:grid-cols-2">
+      <div>
+        <%= tag.div data: day_credit_amount_controller_data(day_credit) do %>
+          <%= label_tag :amount_preset, "Amount", class: "label" %>
+          <%= select_tag :amount_preset,
+            options_for_select(day_credit_amount_options(day_credit), selected_day_credit_amount(day_credit)),
+            class: "select mt-2",
+            data: day_credit_amount_select_data %>
+
+          <%= tag.div data: { day_credit_amount_target: "customFields" }, class: "mt-4" do %>
+            <div class="flex flex-wrap items-center gap-3">
+              <div class="flex items-center gap-2">
+                <%= form.number_field :credited_hours_part, min: 0, class: "input w-24 text-center", data: day_credit_amount_input_data("hours") %>
+                <span class="text-sm font-medium text-slate-600">h</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <%= form.number_field :credited_minutes_part, min: 0, max: 59, class: "input w-24 text-center", data: day_credit_amount_input_data("minutes") %>
+                <span class="text-sm font-medium text-slate-600">m</span>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <%= form.number_field :credited_minutes_part, min: 0, max: 59, class: "input w-24 text-center", data: day_credit_amount_input_data("minutes") %>
-              <span class="text-sm font-medium text-slate-600">m</span>
-            </div>
-          </div>
+          <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
 
-    <div>
-      <%= form.label :note, "Note", class: "label" %>
-      <%= form.text_field :note, class: "input", placeholder: "Optional", autocomplete: "off", data: password_manager_ignore_data %>
+      <div>
+        <%= form.label :note, "Note", class: "label" %>
+        <%= form.text_field :note, class: "input", placeholder: "Optional", autocomplete: "off", data: password_manager_ignore_data %>
+      </div>
     </div>
   </div>
 
