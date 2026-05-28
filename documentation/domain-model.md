@@ -47,4 +47,15 @@ erDiagram
     datetime updated_at
   }
   Session }o--|| User : belongs_to
+  DayCredit {
+    integer id
+    integer user_id
+    date credit_date
+    string credit_type
+    integer credited_minutes
+    text note
+    datetime created_at
+    datetime updated_at
+  }
+  DayCredit }o--|| User : belongs_to
 ```
