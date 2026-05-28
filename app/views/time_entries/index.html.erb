@@ -7,7 +7,7 @@
   <div class="grid gap-3 justify-items-center">
     <div class="grid gap-5 justify-items-center">
       <%= link_to "New Time Entry", new_time_entry_path, class: "btn" %>
-      <%= link_to "New day credit", new_day_credit_path(date: @work_week_start.to_date), class: "text-sm font-medium text-brand-dark/80 transition hover:text-brand-dark" %>
+      <%= link_to "New day credit", new_day_credit_path, class: "text-sm font-medium text-brand-dark/80 transition hover:text-brand-dark" %>
     </div>
     <div class="flex items-center gap-3">
       <%= link_to "Previous Week", time_entries_path(week_start: @week_start - 7.days), class: "btn-ghost" %>
@@ -24,7 +24,7 @@
   <div class="flex flex-wrap items-start justify-end gap-x-6 gap-y-3">
     <div class="grid gap-5 justify-items-center">
       <%= link_to "New Time Entry", new_time_entry_path, class: "btn" %>
-      <%= link_to "New day credit", new_day_credit_path(date: @work_week_start.to_date), class: "text-sm font-medium text-brand-dark/80 transition hover:text-brand-dark" %>
+      <%= link_to "New day credit", new_day_credit_path, class: "text-sm font-medium text-brand-dark/80 transition hover:text-brand-dark" %>
     </div>
     <%= link_to "Previous Week", time_entries_path(week_start: @week_start - 7.days), class: "btn-ghost" %>
     <%= link_to "Next Week", time_entries_path(week_start: @week_start + 7.days), class: "btn-ghost" %>
