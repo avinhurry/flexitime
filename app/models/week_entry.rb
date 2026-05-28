@@ -22,14 +22,8 @@ class WeekEntry < ApplicationRecord
     normalized_week_start = normalize_week_start(week_start)
     contracted_minutes = user.contracted_hours.to_i * 60
 
-    current_range = TimeEntry.work_week_range(normalized_week_start)
-    working_week = user.time_entries.where(clock_in: current_range)
-
-    if working_week.exists?
-      user.week_entries.find_or_create_by!(beginning_of_week: normalized_week_start)
-    else
-      user.week_entries.where(beginning_of_week: normalized_week_start).delete_all
-    end
+    remove_inactive_week_entries_from!(user, normalized_week_start)
+    ensure_week_entries_for_activity_from!(user, normalized_week_start)
 
     previous_entry = user.week_entries.where("beginning_of_week < ?", normalized_week_start)
       .order(beginning_of_week: :desc).first
@@ -40,7 +34,8 @@ class WeekEntry < ApplicationRecord
       .each do |entry|
         range = TimeEntry.work_week_range(entry.beginning_of_week)
         week_minutes = user.time_entries.where(clock_in: range).sum(&:minutes_worked)
-        week_delta = week_minutes - contracted_minutes
+        credited_minutes = DayCredit.total_minutes_for_week(entry.beginning_of_week, user)
+        week_delta = week_minutes + credited_minutes - contracted_minutes
         # Offset is cumulative (prior balance + this week's).
         entry.required_minutes = contracted_minutes - previous_offset
         entry.offset_in_minutes = previous_offset + week_delta
@@ -56,6 +51,39 @@ class WeekEntry < ApplicationRecord
 
   def self.normalize_week_start(week_start)
     TimeEntry.work_week_start(week_start)
+  end
+
+  def self.ensure_week_entries_for_activity_from!(user, normalized_week_start)
+    week_starts = active_week_starts_from(user, normalized_week_start)
+
+    week_starts.each do |activity_week_start|
+      user.week_entries.find_or_create_by!(beginning_of_week: activity_week_start)
+    end
+  end
+
+  def self.remove_inactive_week_entries_from!(user, normalized_week_start)
+    user.week_entries.where("beginning_of_week >= ?", normalized_week_start).find_each do |entry|
+      entry.destroy! unless week_has_activity?(user, entry.beginning_of_week)
+    end
+  end
+
+  def self.active_week_starts_from(user, normalized_week_start)
+    time_entry_week_starts = user.time_entries
+      .where("clock_in >= ?", normalized_week_start)
+      .pluck(:clock_in)
+      .map { |clock_in| normalize_week_start(clock_in) }
+
+    day_credit_week_starts = user.day_credits
+      .where("credit_date >= ?", normalized_week_start.to_date)
+      .pluck(:credit_date)
+      .map { |credit_date| normalize_week_start(credit_date) }
+
+    (time_entry_week_starts + day_credit_week_starts).uniq.sort
+  end
+
+  def self.week_has_activity?(user, week_start)
+    user.time_entries.where(clock_in: TimeEntry.work_week_range(week_start)).exists? ||
+      DayCredit.for_week(user, week_start).exists?
   end
 
   private

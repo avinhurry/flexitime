@@ -32,7 +32,7 @@
         <% nav_link_active = "border-b-2 border-slate-900 text-slate-900" %>
         <% dropdown_link = "block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50" %>
         <% dropdown_link_active = "bg-slate-50 text-slate-900 font-medium" %>
-        <% time_entries_active = controller_name == "time_entries" && !%w[new create].include?(action_name) %>
+        <% time_entries_active = (controller_name == "time_entries" && !%w[new create].include?(action_name)) || controller_name == "day_credits" %>
         <% new_entry_active = controller_name == "time_entries" && %w[new create].include?(action_name) %>
         <% account_active = ["home", "passwords", "work_schedules", "sessions"].include?(controller_name) || controller_path == "identity/emails" %>
         <% create_user_active = controller_name == "registrations" %>

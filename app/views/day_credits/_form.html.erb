@@ -1,0 +1,47 @@
+<%= form_with(model: day_credit, local: true, class: "mt-6 space-y-5") do |form| %>
+  <% if day_credit.errors.any? %>
+    <div class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+      <p class="font-semibold"><%= pluralize(day_credit.errors.count, "error") %> prohibited this day credit from being saved:</p>
+      <ul class="mt-2 list-disc pl-4">
+        <% day_credit.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid gap-5 md:grid-cols-2">
+    <div>
+      <%= form.label :credit_date, "Date", class: "label" %>
+      <%= form.date_field :credit_date, class: "input" %>
+    </div>
+    <div>
+      <%= form.label :credit_type, "Type", class: "label" %>
+      <%= form.select :credit_type, DayCredit.type_options, {}, class: "select" %>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :credited_hours_part, "Credit", class: "label" %>
+    <div class="mt-2 flex flex-wrap items-center gap-3">
+      <div class="flex items-center gap-2">
+        <%= form.number_field :credited_hours_part, min: 0, class: "input w-24 text-center" %>
+        <span class="text-sm font-medium text-slate-600">h</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <%= form.number_field :credited_minutes_part, min: 0, max: 59, class: "input w-24 text-center" %>
+        <span class="text-sm font-medium text-slate-600">m</span>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :note, class: "label" %>
+    <%= form.text_area :note, rows: 3, class: "input" %>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-3">
+    <%= form.submit "Save day credit", class: "btn" %>
+    <%= link_to "Back to time entries", time_entries_path(week_start: day_credit.credit_date || Date.current), class: "btn-ghost" %>
+  </div>
+<% end %>
