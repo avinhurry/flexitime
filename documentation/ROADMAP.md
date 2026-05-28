@@ -1,4 +1,9 @@
 # Roadmap
 
-## Due: 3 Apr 2026
-- [Add time-off and bank holiday adjustments to required hours](https://github.com/avinhurry/flexitime/issues/154)
+## Planned
+
+- [Manual Day Credits](https://github.com/avinhurry/flexitime/issues/192)
+  Add dated credits for bank holidays, annual leave, sick leave, and other credited non-working time without creating fake time entries.
+
+- [Automatic Time Off & Bank Holiday Adjustments](https://github.com/avinhurry/flexitime/issues/154)
+  Suggest or create day credits from public holidays and planned leave, building on manual day credits.
