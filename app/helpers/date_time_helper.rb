@@ -17,6 +17,10 @@ module DateTimeHelper
     time.strftime("%-d %b %Y, %H:%M")
   end
 
+  def format_minutes_as_hours_minutes(minutes)
+    TimeEntry.format_decimal_hours_to_hours_minutes(minutes.to_i / 60.0)
+  end
+
   def breaks_duration_label(time_entry)
     return "No breaks recorded" unless time_entry.time_entry_breaks.any?
 

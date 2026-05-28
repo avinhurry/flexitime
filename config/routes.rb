@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       patch :end_break
     end
   end
+  resources :day_credits, except: [ :index, :show ], path: "day-credits"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -6,16 +6,20 @@ class TimeEntriesController < ApplicationController
     @time_entries = current_user.time_entries
       .where(clock_in: work_week_range)
       .order(clock_in: :asc)
+    @day_credits = DayCredit.for_week(current_user, @work_week_start)
     total_hours_decimal = TimeEntry.total_hours_for_week(@week_start, current_user)
     @total_hours = TimeEntry.format_decimal_hours_to_hours_minutes(total_hours_decimal)
     @total_minutes = (total_hours_decimal * 60).round
+    @credited_minutes = DayCredit.total_minutes_for_week(@work_week_start, current_user)
+    @credited_hours = TimeEntry.format_decimal_hours_to_hours_minutes(@credited_minutes / 60.0)
+    @accounted_minutes = @total_minutes + @credited_minutes
     required_minutes = WeekEntry.required_minutes_for(current_user, @work_week_start)
     @required_minutes = required_minutes
     required_hours_decimal = required_minutes / 60.0
     @required_hours = TimeEntry.format_decimal_hours_to_hours_minutes(required_hours_decimal)
-    @hours_difference = total_hours_decimal - required_hours_decimal
-    @remaining_minutes = [ required_minutes - @total_minutes, 0 ].max
-    @ahead_minutes = [ @total_minutes - required_minutes, 0 ].max
+    @hours_difference = (@accounted_minutes - required_minutes) / 60.0
+    @remaining_minutes = [ required_minutes - @accounted_minutes, 0 ].max
+    @ahead_minutes = [ @accounted_minutes - required_minutes, 0 ].max
   end
 
   def show

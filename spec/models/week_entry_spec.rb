@@ -44,6 +44,42 @@ RSpec.describe WeekEntry, type: :model do
     end
   end
 
+  context "when day credits exist" do
+    it "includes credited minutes in the weekly balance" do
+      user = create(:user, email: "credits@example.com", contracted_hours: 37)
+      week_start = Date.new(2025, 3, 3)
+
+      5.times do |i|
+        user.day_credits.create!(
+          credit_date: week_start + i.days,
+          credit_type: "annual_leave",
+          credited_minutes: DayCredit.default_credited_minutes_for(user)
+        )
+      end
+
+      week_entry = user.week_entries.find_by(beginning_of_week: TimeEntry.work_week_start(week_start))
+
+      expect(week_entry).to be_present
+      expect(week_entry.offset_in_minutes).to eq(0)
+    end
+
+    it "rebuilds week entries when a credit moves to a different week" do
+      user = create(:user, email: "moved-credit@example.com", contracted_hours: 37)
+      old_week_start = Date.new(2025, 3, 3)
+      new_week_start = Date.new(2025, 3, 10)
+      day_credit = user.day_credits.create!(
+        credit_date: old_week_start,
+        credit_type: "annual_leave",
+        credited_minutes: DayCredit.default_credited_minutes_for(user)
+      )
+
+      day_credit.update!(credit_date: new_week_start)
+
+      expect(user.week_entries.find_by(beginning_of_week: TimeEntry.work_week_start(old_week_start))).to be_nil
+      expect(user.week_entries.find_by(beginning_of_week: TimeEntry.work_week_start(new_week_start))).to be_present
+    end
+  end
+
   context "across the daylight saving boundary" do
     it "returns the current week's stored target after creating a post-DST entry" do
       user = create(:user, email: "dst@example.com")
