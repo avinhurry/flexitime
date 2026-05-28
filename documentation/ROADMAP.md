@@ -2,8 +2,9 @@
 
 ## Planned
 
-- [Manual Day Credits](https://github.com/avinhurry/flexitime/issues/192)
-  Add dated credits for bank holidays, annual leave, sick leave, and other credited non-working time without creating fake time entries.
+- [Automatic Time Off & Bank Holiday Adjustments: Automatically suggest or create credits from public holidays and planned leave.](https://github.com/avinhurry/flexitime/issues/154)
 
-- [Automatic Time Off & Bank Holiday Adjustments](https://github.com/avinhurry/flexitime/issues/154)
-  Suggest or create day credits from public holidays and planned leave, building on manual day credits.
+## Completed
+
+- [Manual Day Credits: Add dated credits for annual leave, bank holidays, sick leave, and other non-working time.](https://github.com/avinhurry/flexitime/issues/192)  
+  
