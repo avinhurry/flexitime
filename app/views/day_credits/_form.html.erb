@@ -1,4 +1,4 @@
-<%= form_with(model: day_credit, local: true, class: "mt-6 space-y-5") do |form| %>
+<%= form_with(model: day_credit, local: true, class: "mt-6 space-y-5", html: { autocomplete: "off" }) do |form| %>
   <% if day_credit.errors.any? %>
     <div class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
       <p class="font-semibold"><%= pluralize(day_credit.errors.count, "error") %> prohibited this day credit from being saved:</p>
@@ -13,31 +13,42 @@
   <div class="grid gap-5 md:grid-cols-2">
     <div>
       <%= form.label :credit_date, "Date", class: "label" %>
-      <%= form.date_field :credit_date, class: "input" %>
+      <%= form.date_field :credit_date, class: "input", data: password_manager_ignore_data %>
     </div>
     <div>
       <%= form.label :credit_type, "Type", class: "label" %>
-      <%= form.select :credit_type, DayCredit.type_options, {}, class: "select" %>
+      <%= form.select :credit_type, DayCredit.type_options, {}, class: "select", data: password_manager_ignore_data %>
     </div>
   </div>
 
-  <div>
-    <%= form.label :credited_hours_part, "Credit", class: "label" %>
-    <div class="mt-2 flex flex-wrap items-center gap-3">
-      <div class="flex items-center gap-2">
-        <%= form.number_field :credited_hours_part, min: 0, class: "input w-24 text-center" %>
-        <span class="text-sm font-medium text-slate-600">h</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <%= form.number_field :credited_minutes_part, min: 0, max: 59, class: "input w-24 text-center" %>
-        <span class="text-sm font-medium text-slate-600">m</span>
-      </div>
-    </div>
-  </div>
+  <div class="grid gap-5 md:grid-cols-2">
+    <div>
+      <%= tag.div data: day_credit_amount_controller_data(day_credit) do %>
+        <%= label_tag :amount_preset, "Amount", class: "label" %>
+        <%= select_tag :amount_preset,
+          options_for_select(day_credit_amount_options(day_credit), selected_day_credit_amount(day_credit)),
+          class: "select mt-2",
+          data: day_credit_amount_select_data %>
 
-  <div>
-    <%= form.label :note, class: "label" %>
-    <%= form.text_area :note, rows: 3, class: "input" %>
+        <%= tag.div data: { day_credit_amount_target: "customFields" }, class: "mt-4" do %>
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center gap-2">
+              <%= form.number_field :credited_hours_part, min: 0, class: "input w-24 text-center", data: day_credit_amount_input_data("hours") %>
+              <span class="text-sm font-medium text-slate-600">h</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <%= form.number_field :credited_minutes_part, min: 0, max: 59, class: "input w-24 text-center", data: day_credit_amount_input_data("minutes") %>
+              <span class="text-sm font-medium text-slate-600">m</span>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div>
+      <%= form.label :note, "Note", class: "label" %>
+      <%= form.text_field :note, class: "input", placeholder: "Optional", autocomplete: "off", data: password_manager_ignore_data %>
+    </div>
   </div>
 
   <div class="flex flex-wrap items-center gap-3">

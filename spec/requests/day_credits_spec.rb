@@ -23,6 +23,9 @@ RSpec.describe "Day credits", type: :request do
 
       document = Capybara.string(response.body)
       expect(document.find("input[name='day_credit[credit_date]']").value).to eq("2025-03-03")
+      expect(document.find("select[name='amount_preset']").value).to eq("standard")
+      expect(response.body).to include("Standard day · 7h 24m")
+      expect(response.body).to include("Half day · 3h 42m")
       expect(document.find("input[name='day_credit[credited_hours_part]']").value).to eq("7")
       expect(document.find("input[name='day_credit[credited_minutes_part]']").value).to eq("24")
     end
@@ -47,6 +50,22 @@ RSpec.describe "Day credits", type: :request do
       expect(response.body).to include("Spring bank holiday")
     end
 
+    it "creates a half-day credit without JavaScript" do
+      post day_credits_path, params: {
+        amount_preset: "half",
+        day_credit: {
+          credit_date: "2025-03-03",
+          credit_type: "annual_leave",
+          note: "Morning leave"
+        }
+      }
+
+      day_credit = user.day_credits.last
+
+      expect(response).to redirect_to(time_entries_path(week_start: Date.new(2025, 3, 3)))
+      expect(day_credit.credited_minutes).to eq(222)
+    end
+
     it "renders errors for invalid credit minutes" do
       post day_credits_path, params: {
         day_credit: {
@@ -59,6 +78,8 @@ RSpec.describe "Day credits", type: :request do
 
       expect(response).to have_http_status(:unprocessable_content)
       expect(CGI.unescapeHTML(response.body)).to include("Credited minutes part must be less than 60")
+      document = Capybara.string(response.body)
+      expect(document.find("select[name='amount_preset']").value).to eq("custom")
     end
 
     it "updates a credit" do

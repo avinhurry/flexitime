@@ -42,13 +42,15 @@ class DayCreditsController < ApplicationController
   private
 
   def day_credit_params
-    params.require(:day_credit).permit(
+    permitted = params.require(:day_credit).permit(
       :credit_date,
       :credit_type,
       :credited_hours_part,
       :credited_minutes_part,
       :note
     )
+
+    apply_amount_preset(permitted)
   end
 
   def current_user
@@ -61,6 +63,22 @@ class DayCreditsController < ApplicationController
     Date.parse(params[:date])
   rescue Date::Error
     Date.current
+  end
+
+  def apply_amount_preset(permitted)
+    case params[:amount_preset]
+    when "standard"
+      assign_credited_minutes(permitted, DayCredit.default_credited_minutes_for(current_user))
+    when "half"
+      assign_credited_minutes(permitted, (DayCredit.default_credited_minutes_for(current_user) / 2.0).round)
+    end
+
+    permitted
+  end
+
+  def assign_credited_minutes(permitted, total_minutes)
+    permitted[:credited_hours_part] = total_minutes / 60
+    permitted[:credited_minutes_part] = total_minutes % 60
   end
 
   def week_path_for(day_credit)
