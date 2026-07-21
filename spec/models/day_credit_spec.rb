@@ -9,6 +9,12 @@ RSpec.describe DayCredit, type: :model do
     end
   end
 
+  describe ".type_options" do
+    it "includes medical leave" do
+      expect(described_class.type_options).to include([ "Medical leave", "medical_leave" ])
+    end
+  end
+
   describe "credited time parts" do
     it "stores hours and minutes as total credited minutes" do
       user = create(:user)

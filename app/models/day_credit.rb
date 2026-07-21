@@ -3,6 +3,7 @@ class DayCredit < ApplicationRecord
     "bank_holiday" => "Bank holiday",
     "annual_leave" => "Annual leave",
     "sick_leave" => "Sick leave",
+    "medical_leave" => "Medical leave",
     "other" => "Other"
   }.freeze
 
