@@ -5,6 +5,10 @@ ruby "3.4.6"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.3"
 
+# JSON 3.x breaks Rails 8.1 (ActiveSupport::JSON.decode) and sprockets < 4.3.
+# Pin to 2.x until Rails adds json 3 support.
+gem "json", "~> 2.0"
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
@@ -48,7 +52,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # Automatic Ruby code style checking tool
-  gem "rubocop", "~> 1.90"
+  gem "rubocop", "~> 1.91"
 
   # Docker integration for Rails apps
   gem "dockerfile-rails", ">= 1.6"
