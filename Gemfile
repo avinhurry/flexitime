@@ -7,7 +7,7 @@ gem "rails", "~> 8.1.3"
 
 # JSON 3.x breaks Rails 8.1 (ActiveSupport::JSON.decode) and sprockets < 4.3.
 # Pin to 2.x until Rails adds json 3 support.
-gem "json", "~> 2.0"
+gem "json", "~> 3.0"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
